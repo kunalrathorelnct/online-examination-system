@@ -5,5 +5,5 @@ from .models import *
 admin.site.register(Student)
 admin.site.register(Exam)
 admin.site.register(Student_Exam)
-admin.site.register(Questions)
+admin.site.register(Question)
 admin.site.register(Student_Response)

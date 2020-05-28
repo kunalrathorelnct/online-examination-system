@@ -6,10 +6,17 @@ class Student(models.Model):
 	email = models.EmailField(primary_key=True)
 	name = models.CharField(max_length=50)
 
+	def __str__(self):
+		return self.name
+
 class Exam(models.Model):
 	exam_code = models.CharField(unique=True,max_length=20)
 	start_time = models.DateTimeField(blank=False,null=False)
 	duration = models.DurationField()
+
+
+	def __str__(self):
+		return self.exam_code
 
 class Student_Exam(models.Model):
 	def file_path(self,filename):
@@ -22,16 +29,21 @@ class Student_Exam(models.Model):
 	end_time = models.DateTimeField()
 	ss = models.FileField(null=True,blank=True,upload_to = file_path)
 
-class Questions(models.Model):
+
+class Question(models.Model):
 	def file_path(self,filename):
-		return "{0}/{1}".format(self.exam.exam_code,filename)
+		return "{0}/{1}/{2}".format(self.exam.exam_code,self.question_text[:5],filename)
 
 	exam = models.ForeignKey(Exam,on_delete = models.CASCADE)
 	question_text = models.TextField()
 	ex_img = models.FileField(null=True,blank=True,upload_to = file_path)
 
+
+	def __str__(self):
+		return self.question_text[:5]
+
 class Student_Response(models.Model):
 	student_exam = models.ForeignKey(Student_Exam,on_delete = models.CASCADE)
-	question = models.ForeignKey(Questions,on_delete = models.CASCADE)
+	question = models.ForeignKey(Question,on_delete = models.CASCADE)
 	time_stamp = models.DateTimeField(auto_now=True)
 	response = models.TextField()
