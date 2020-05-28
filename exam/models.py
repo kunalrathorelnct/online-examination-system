@@ -15,7 +15,6 @@ class Exam(models.Model):
 	start_time = models.DateTimeField(blank=False,null=False)
 	duration = models.DurationField()
 
-
 	def __str__(self):
 		return self.exam_code
 
@@ -51,3 +50,9 @@ class Student_Response(models.Model):
 	question = models.ForeignKey(Question,on_delete = models.CASCADE)
 	time_stamp = models.DateTimeField(auto_now=True)
 	response = models.TextField()
+
+	class Meta:
+		unique_together = ['student_exam','question']
+
+	def __str__(self):
+		return self.student_exam.student.name+"_"+str(self.question)
