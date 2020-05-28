@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 # Create your models here.
 
 
@@ -24,11 +25,14 @@ class Student_Exam(models.Model):
 
 	student = models.ForeignKey(Student,on_delete=models.CASCADE)
 	exam = models.ForeignKey(Exam,on_delete=models.CASCADE)
+	external_identifier = models.UUIDField(unique=True, default=uuid.uuid4)
 	warning_count = models.IntegerField(default=0)
 	start_time = models.DateTimeField()
 	end_time = models.DateTimeField()
 	ss = models.FileField(null=True,blank=True,upload_to = file_path)
 
+	def __str__(self):
+		return str(self.student.name)+'_'+self.exam.exam_code
 
 class Question(models.Model):
 	def file_path(self,filename):
