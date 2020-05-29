@@ -33,7 +33,9 @@ def examView(request,uid):
 		if student_object.exam.start_time<=timezone.now():
 			name = student_object.student.name
 			email = student_object.student.email
-			return render(request,'index.html',{'name':name,'email':email,'uid':uid})
+			roll_no = student_object.student.roll_no
+			subject_name = student_object.exam.subject_name
+			return render(request,'index.html',{'name':name,'email':email,'uid':uid,'roll_no':roll_no,'subject_name':subject_name})
 		else:
 			return HttpResponse("Start time is "+str(student_object.start_time)+"Or paper was Over")
 	return HttpResponse("Only Get Allowded")
