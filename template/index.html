@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
    <head>
@@ -6,7 +7,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <title>Online Exam</title>
       <script>
@@ -98,7 +99,7 @@
                     <button id="PreviousInst" class="btn btn-outline-danger border float-left m-3" onclick="showInstr('previous')"><i class="fa fa-caret-left"></i><b class="h5 font-weight-bold"> Previous</b></button>
                  </div>
                  <div class="col">
-                    <button id="readylink" class="btn btn-outline-success border m-3 ml-auto" href="{% url 'onlineexam' %}"><b class="h5 font-weight-bold">Start Test </b><i class="fa fa-caret-right"></i></button>
+                    <a href="{% url 'exam:onlineexam' %}"><button id="readylink" class="btn btn-outline-success border m-3 ml-auto"><b class="h5 font-weight-bold">Start Test </b><i class="fa fa-caret-right"></i></button></a>
                  </div>
                 <div class="col">
                    <button id="instPagination" class="btn btn-outline-danger border float-right m-3" onclick="showInstr('next')"><b class="h5 font-weight-bold">Next </b><i class="fa fa-caret-right"></i></button>

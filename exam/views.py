@@ -13,6 +13,9 @@ def onlineexam(request):
 def home(request):
 	return render(request,'index.html')
 
+def iframeview(request):
+	return render(request,'iframesquestionpaper.html')
+
 def examView(request,uid):
 	if request.method=='GET':
 		student_object = Student_Exam.objects.get(external_identifier = uid)
