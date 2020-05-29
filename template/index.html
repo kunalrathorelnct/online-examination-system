@@ -60,8 +60,8 @@
          <div class="jumbotron jumbotron-fluid bg-dark text-white p-0">
             <div class="row ">
                <div class="col p-5">
-                  <h5 class="m-4">Candidate Name : <span class="text-warning">Kunal Rathore</span></h5>
-                  <h5 class="m-4">Email Address : <span class="text-warning">  Kunalrathore.it@gmail.com</span> </h5>
+                  <h5 class="m-4">Candidate Name : <span class="text-warning">{{ name }}</span></h5>
+                  <h5 class="m-4">Email Address : <span class="text-warning">  {{ email }}</span> </h5>
                   <h5 class="m-4">Exam Subject : <span class="text-warning">Computer Networks</span> </h5>
                </div>
                <div class="col">
@@ -99,7 +99,7 @@
                     <button id="PreviousInst" class="btn btn-outline-danger border float-left m-3" onclick="showInstr('previous')"><i class="fa fa-caret-left"></i><b class="h5 font-weight-bold"> Previous</b></button>
                  </div>
                  <div class="col">
-                    <a href="{% url 'exam:onlineexam' %}"><button id="readylink" class="btn btn-outline-success border m-3 ml-auto"><b class="h5 font-weight-bold">Start Test </b><i class="fa fa-caret-right"></i></button></a>
+                    <a href="{% url 'exam:onlineexam' uid %}"><button id="readylink" class="btn btn-outline-success border m-3 ml-auto"><b class="h5 font-weight-bold">Start Test </b><i class="fa fa-caret-right"></i></button></a>
                  </div>
                 <div class="col">
                    <button id="instPagination" class="btn btn-outline-danger border float-right m-3" onclick="showInstr('next')"><b class="h5 font-weight-bold">Next </b><i class="fa fa-caret-right"></i></button>

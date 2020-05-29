@@ -7,10 +7,9 @@ from . import views
 app_name = 'exam'
 
 urlpatterns = [
-		path('',views.home),
 		url('instruction', TemplateView.as_view(template_name="iframesInstruction.html"),name='instructions'),
-		path('iframeview',views.iframeview,name='iframe'),
-		path('onlineexam/', views.onlineexam, name='onlineexam'),
+		path('iframeview/<uuid:uid>',views.iframeview,name='iframe'),
+		path('onlineexam/<uuid:uid>', views.onlineexam, name='onlineexam'),
 		
     	path('info/<uuid:uid>/',views.examView),
     	path('getquestion/<uuid:uid>/',views.StudentQuizView.as_view()),

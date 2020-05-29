@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
    <head>
@@ -6,8 +7,8 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-      <link rel="stylesheet" href="css/style.css">
-      <link rel="stylesheet" href="css/aecInstructions.css">
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+      <link rel="stylesheet" href="{% static 'css/aecInstructions.css' %}">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <title>Online Exam</title>
       <style>
@@ -55,7 +56,7 @@
                 </div> 
                 <div class="row h-100">
                     <div class="col">
-                        <iframe id="iframeId" class="w-100 h-100" src="{% url 'exam:iframe' %}"></iframe>
+                        <iframe id="iframeId" class="w-100 h-100" src="{% url 'exam:iframe' uid %}"></iframe>
                     </div>
                 </div>
                 <div class="row ">
