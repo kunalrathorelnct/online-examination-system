@@ -1,0 +1,127 @@
+.instruction_area span.answered {
+    background: url("../images/questions-sprite.png") no-repeat scroll 0 0 transparent;
+    color: #FFFFFF;
+    /* cursor: pointer; */
+    float: left;
+    font-weight: bold;
+    height: 38px;
+    line-height: 42px;
+   /*  margin: 3px; */
+    text-align: center;
+    width: 34px;
+    background-position: -5px -48px;
+}
+.instruction_area span.review {
+    background: url("../images/questions-sprite.png") no-repeat scroll 0 0 transparent;
+    color: #FFFFFF;
+    /* cursor: pointer; */
+    float: left;
+    font-weight: bold;
+    height: 38px;
+    line-height: 42px;
+    /* margin: 3px; */
+    text-align: center;
+    width: 34px;
+    background-position: -72px -48px;
+}
+ .instruction_area span.review_answered {
+	background: url("../images/questions-sprite.png") no-repeat scroll 0 0 transparent;
+    color: #FFFFFF;
+    /* cursor: pointer; */
+    float: left;
+    font-weight: bold;
+    height: 38px;
+    line-height: 42px;
+    /* margin: 3px; */
+    text-align: center;
+    width: 34px;
+    background-position: -169px -47px;
+} 
+.instruction_area span.review_marked_considered {
+	background: url("../images/questions-sprite.png") no-repeat scroll 0 0 transparent ;
+    color: #FFFFFF ;
+   /*  cursor: pointer; */
+    float: left ;
+    font-weight: bold ;
+    height: 38px ;
+    /* margin: 3px !important; */
+    text-align: center ;
+    width: 34px ;
+    line-height: 42px;
+	background-position: -6px -81px;
+}
+.instruction_area span.review_marked {
+	background: url("../images/questions-sprite.png") no-repeat scroll 0 0 transparent ;
+    color: #FFFFFF ;
+   /*  cursor: pointer ; */
+    float: left ;
+    font-weight: bold ;
+    height: 38px ;
+    /* margin: 3px !important; */
+    text-align: center ;
+    width: 34px ;
+    line-height: 42px;
+	background-position: -169px -49px;
+}
+.instruction_area span.not_answered {
+	background: url("../images/questions-sprite.png") no-repeat scroll 0 0 transparent;
+    color: #FFFFFF;
+    /* cursor: pointer; */
+    float: left;
+    font-weight: bold;
+    height: 38px;
+    line-height: 42px;
+    /* margin: 3px; */
+    text-align: center;
+    width: 34px;
+    background-position: -39px -48px;
+}
+.instruction_area span.not_visited {
+	background: url("../images/questions-sprite.png") no-repeat scroll 0 0 transparent;
+    color: #FFFFFF;
+   /*  cursor: pointer; */
+    float: left;
+    font-weight: bold;
+    height: 38px;
+    line-height: 42px;
+ 	/*  margin: 3px; */
+    text-align: center;
+    width: 34px;
+    background-position: -105px -49px;
+    color: #474747;
+}
+
+
+.not_visited {
+    background: url(../images/questions-sprite.png) no-repeat;
+    color: #fff;
+    cursor: pointer;
+    float: left;
+    font-size: 1.417em;
+    font-weight: normal;
+    height: 43px;
+    line-height: 42px;
+    margin-bottom: 10px;
+    margin-right: 2px;
+    text-align: center;
+    width: 50px;
+    background-position: -157px -4px;
+    color: #474747;
+    height: 43px;
+    line-height: 43px;
+}
+.not_answered{
+    background: url(../images/questions-sprite.png) no-repeat;
+    color: #fff;
+    cursor: pointer;
+    float: left;
+    font-size: 1.417em;
+    font-weight: normal;
+    line-height: 42px;
+    margin-bottom: 10px;
+    margin-right: 2px;
+    text-align: center;
+    background-position: -57px -6px;
+    width: 49px;
+    height: 43px;
+}

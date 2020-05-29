@@ -7,6 +7,12 @@ from rest_framework import status
 from rest_framework.views import APIView
 from django.utils import timezone
 
+def onlineexam(request):
+	return render(request,'quiz.html')
+	
+def home(request):
+	return render(request,'index.html')
+
 def examView(request,uid):
 	if request.method=='GET':
 		student_object = Student_Exam.objects.get(external_identifier = uid)

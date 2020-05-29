@@ -1,0 +1,147 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="css/aecInstructions.css">
+      
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   </head>
+
+   <body>
+      <div id="firstPage" style="padding-left: 13px">
+         <span style="float: right; display: none; padding: 2px;">
+            <span class="viewIn">View in :</span>&nbsp;
+            <select id="basInst" onchange="parent.changeSysInst(this.value,'sysInstText','cusInstText')">
+               <option value="sysInstText1">English</option>
+            </select>
+         </span>
+         <div class="sysInstText1" style="height: 93%; width: 100%;">
+            <div>
+               <p style="text-align: center;"><span style="color:#001A50;"><span style="font-size: 28px;"><span style="font-family: arial,helvetica,sans-serif;"><strong><u>General Instructions</u></strong></span></span></span></p>
+               <center style="text-align: left;"><strong><font size="4">Read the following instructions carefully </font></strong></center>
+            </div>
+            <ol style="TEXT-ALIGN: left; LIST-STYLE-TYPE: decimal; PADDING-LEFT: 4%; PADDING-TOP: 3px">
+               <li>Total duration of the examination is <strong>180</strong> minutes. Calculator is available on top, right-hand side of the screen.</li>
+               <li>The clock will be set at the server. The countdown timer at the top, right-hand side of the screen will display the time available for you to complete the examination. When the timer reaches zero, the examination will end automatically. You will not be required to end or submit your examination.</li>
+               <li>
+                  The Question Palette displayed on the right-hand side of the screen will show the status of each question using one of the following symbols: 
+                  <table class="instruction_area" style="FONT-SIZE: 100%">
+                     <tbody>
+                        <tr>
+                           <td><span class="not_visited" title="Not Visited">1</span></td>
+                           <td>This question has not been visited yet.</td>
+                        </tr>
+                        <tr>
+                           <td><span class="not_answered" title="Not Answered">2</span></td>
+                           <td>This question has been visited,but not answered.</td>
+                        </tr>
+                        <tr>
+                           <td><span class="answered" title="Answered">3</span></td>
+                           <td>This question has been answered and will be considered for evaluation.</td>
+                        </tr>
+                        <tr>
+                           <td><span class="review" title="Marked for Review">4</span></td>
+                           <td>This question has been marked for review and has not been answered.</td>
+                        </tr>
+                        <tr>
+                           <td><span class="review_marked_considered" title="Answered &amp; Marked for Review">5</span></td>
+                           <td>This question has been answered and marked for review, which will be considered for evaluation.</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </li>
+            </ol>
+            <ol start="4" style="TEXT-ALIGN: left; LIST-STYLE-TYPE: decimal; PADDING-LEFT: 4%; PADDING-TOP: 3px">
+               <li>Click on <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAXCAIAAABiVjOwAAABGUlEQVQ4jZ3UsW6DMBAG4ENgzjCk1PA2zRixtqzIU8zU4Alo0yZzlacDiQ0Ej9A+ASgdkBolgcbkHy198vnsMxznB+43Xdf9KKTv+5Mpy5IxxhhzHGexeGBjcV23bduTyfMcAABA00DXdZhIVVUnUxTFsOr7q93uw7Ksa6BpWl3XI4ZSynmYpgkiqhoAIIREkZByY5qmqgEARJRyI8SaEKJqhiKzLOE8NAxD1QCAZVnb7XsQPA9FKhkA8DzvcPhaLp9m7fMWBC9DD28bREzTOecxTTOOX6NIqPaNECLEWsr44lonDSJyHmZZQim9qHbS+P5qv/+c/d5s2x5r+5X5m4X/czYLZVk+3gpjrGmas9n+VkjXdcf7/pBfwJwaWoHdLtgAAAAASUVORK5CYII=">, which appears to the left side of Question Palette to maximize the Question Area. To view the Question Palette again, click on <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAWCAIAAACpCuAVAAABE0lEQVQ4jZWTTUvDMBiAU2i+Wkpp+nPcUXbXDXRlp6Un16Cb20E3dJP9vhZya2l/gv6CFD0EVjftmj6XwEseeD/Bd3+AfpRSXwbUdd04UkrWRRiGVVU1TpqmwIA8zxsny7K2f67rIoQAAJZlFUXR7TiOs9u9DQZXpg6ldLN5GY9vMcZGDsZ4tXqeTiPbtnWkw0EIJclDHHMI4TF4yYEQcj4TItEpdTsY48nkbrl8IoScZdvqDIfXh8MHY+xvS1odQkgU3S8Wj2eJddcTx1yIuR6lkaOrEmLO+cy0b8ck1+s+89FQSrfb19Hopve+7ffv/+/bhVv4XdLJLUgpgxY8z/N9PwgCxlhZlie3/WmAUqpxevEDM6Tnc2wV2GIAAAAASUVORK5CYII=">, which appears to the right side of Question Area.</li>
+               <li>Click on <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAdCAIAAADZ8fBYAAADvElEQVRIiZ2W23MTVRjAd/gDAk88wJC02W2ywe6L47NV/gsdHYs+KMw4puMgZK8xHZ1hatsZhhcpSCNIq7S6M+3uOWebmtAGewkNmaKYpGl6BWoaEEeL2IE5PpwSN3sJlW/Ow+585/vtOd91KdxQHj76J1moDGXX+ybLfenycHY9Wag8fLTd2ApjTLkpflqsHruSPdJzjYsZLTL0RjQvrwVkyMWM13pS71+em1qs/j/u9cVq+8VZT1j18RojgYAMgwpkFcgqMKjAgAwZCfh4zRNW3/pq5nrp/q6459NLXOeYN6KxURRquNgo8kY0rnPsfHrpOdwulKdFwEjAAj14atQTVj1h9eCpUQuakQAtgi6Ud+V+ObFIi6BFAiEbND69TPbEp5ct6FAUtUiAFvVzE2UH7mSp+tKnBmODEu7ZVIlsO5sq2bmhKGIk0Boz0qVNK7e9f9bLa6wCX4zLKtDLa29fnK3jJgsVT1h1hO6SS9B7O1Tw893/uJ8Mz3sjmlvcd8kNRZGP1z789uYOt/Ln49d7r9k9SxLWjVvTWrzc1p3a+ONvjDGVLFS4mBGQoQVKi4BVUECGdm5AhqyCaBFY0AEZcp1GslDBGFNXs2ukoszQ/SdGTqN8d6LoF/QDJ+u4B06O+gW9J1E8jfL7T4yY0aQah2+uY4yp/qnlJkGvqVkF+nitvX8nsmd+LO75YOhMcmHnNbmw59hQb6JIXt+7NNdcb9ss6PGpFYwxdS5dNmdYk6B/9F3OnOGCeqt3fAfUO14U1Ftm7fGBbLOgm8/Uly5jjKnvc+tBkx8CMnzl83E1d6dmuf3k6VJ1izwvVbe2nzytqa7OrbWaYhNUYFCGP+TuYIypVLHCddbFjRZBs6BPlZ0bVU1G5u+SZmKJW6pYeZZnPdY8YyTgF/SBzJobdDCzxtRDidWrX6TukTzDGH88lLPXBS0CLmYMZladoKtczKBFa8r7eO34lSzZQ2GME7d/84RVe/3QIvCLerpUNxfSpapf1O3QUBTt61BH5011jDF+9+vMIadSZiTgF8HgM4d8M7NK265P1qGI9k5/fd/BGN9YfkAojqdujRljtzcGMqtkCDl+/nAUza08sHKxe18n6Jc/G2uNIUdto75OpAvl/S7XtNS6xVGN5hCRSzMrIQU1aJvm5Y1oh6Po8syKPWcc5vzEwuabF6b3htUmXneb8028vq9DfePC9OTCpp3gzCWS+HXjaPxGW3fK/l/S1p08Gs+gX+652TbiEvl9y+E/6v5fjxtbPZ/7wvIvPJbPGpNy5roAAAAASUVORK5CYII="> to navigate to the bottom and Click on <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAdCAIAAAAyxktbAAAERElEQVRIibXWXUxbVRwA8L35PuPmBi2XlvZeMMFsLlv8StSoie5hkRmzh2VxMy6aLItBWNt723u7wRA3ZS7gUvyYwkYM0ZDQ9p57WgqMFun4skqgE+mAfaRdoWwtrW3px64Pl/T2tsfBYjw5Dyftub/+z7n9/8/Zwv9vbcuGMzLZrN1770L/XO3Pv394dcJgnjY5b7p8y/+JnvGHj3WOl2qt5RQopwBGAYwE62MS4AzU9EyFosnHox/EU590eyqNNpmOxWmIM5CQdpyBaprbqbHube5vd81nsg83RfuC0cOXx3ZoLGoaVhptj+5KPYeRwGCeicRTG9DL0eSepj4FBQim0MUZqKK54s/VNMRI8N437kfR4b9TB01umY5FuDSsMtqe/3xAqUfoOAPlOraRvZG/MxK6EXhlWoRLMLBUa21gvb6l6KstQ3IdW7wzahpWGDg4E0DQt+/HXzo/qDRwxe62esvRzvFsNsvzvNcfefn8IHJlZST7brsbQX/cNVmisRa7GAlO/PQb/1Bc6e2V+P7WYTmJ0LfW9l5xL0rodDb73FmHShoywcCdGutHXZMrsbXCf9FSdF9zP0aBAhqjwJEfxiT06MLK0/WW/CgIBpZorG+1ulYTaR7VXL7QniZHuVRXGbi9n/X7w3GR/sI+W6K15rtlJHvQNBJbQ7tCc/61tKuxT6EX16qmYdVp28BsUKRPdnvKSPG9l1Pg0LfXA5FETplfjgmDVCYbXBWTe/LWfYKx5ZILZ6DKwHVP3BHpA5d+VeQtbXu9xXPnQe55fzj+dqtLGAfCicOXx/Jjp83TubAIBpaRoG1wTqRr2t35tEIPDlwaXgzFeJ6PJFI1phG5jhVmBleTT5zoqfvlj/U9mQs922DPRS3s5NfXfCL9QecERoo0YbTJtNb9bcMLy7HXLzp3nLIQNBRmLkeTW2t7n/y0t4H1jtwMVRltyry9xhlYoeeujC6KtNHilUlzjGBsGAX2NQ9gJFDTkGBs+TTBQJyG1Q32CgNHSOsBwUAwHRDpHs/dbXXmonxZfz/FtLB2nIaE9BE1Dasb7DP+iEjHkmnhC2TlRNLIrqDAO6YRYaaY6Ed+HEPWnceit9db2q75Cun+G8FnTqMD3yRdYeB2NzlyR5pIJ9OZox3jclRJ2wwtlOwv+2ZzoKRez95bffHcoEJfWHTUNKwyrtNr6WwxTTCwnALHOiZiaxk0zfP8wJ/BEo2l4CgRjl3aPH2qZ+pktyc/A3JpsvusI7iayKcQx27X6K1djX0YBXCpLtexch1b4KppKNOxb3zlvD6/UuCgLwtTd8OvtAypDFChR5y/uR8rI0ElA49fnQyEE8XIv15xApHE98MLr10YeqrOLNexSj2npiHBQJWBU+hBqdZaorXWmNzslH8tnUEKG1zMoon0+OLKGdZ76LvRF84NVJ+xv3nR+X7HeItjdjEUi6fQqND+ATD6JtSdiaGeAAAAAElFTkSuQmCC">to navigate to the top of the Question Area, without scrolling.</li>
+            </ol>
+            <strong><u>Navigating to a Question:</u></strong> 
+            <ol start="6" style="TEXT-ALIGN: left; LIST-STYLE-TYPE: decimal; PADDING-LEFT: 4%; PADDING-TOP: 3px ">
+               <li>Click on the question number in the Question Palette to go to that particular question directly.</li>
+               <li>You can view all the questions by clicking on the<strong> Question Paper</strong> button that appears at top, right-hand side of the screen.</li>
+            </ol>
+            <p><b><u>Answering a Question : </u></b></p>
+            <ol start="8" style="TEXT-ALIGN: left; LIST-STYLE-TYPE: decimal; PADDING-LEFT: 4%; PADDING-TOP: 3px ">
+               <li>
+                  Procedure for answering a multiple choice type question (MCQ) : 
+                  <ol style="TEXT-ALIGN: left; PADDING-LEFT: 4%; PADDING-TOP: 3px " type="a">
+                     <li>To select your answer, click on the button of the corresponding option.</li>
+                     <li>To deselect your chosen answer, click on the button of the chosen option once again or click on the <strong>Clear Response</strong> button.</li>
+                     <li>To change your chosen answer, click on the button of the newly identified answer.</li>
+                  </ol>
+                  <br> <br>  
+                  <ol start="9" style="PADDING-LEFT: 1px; ">
+                     <li>
+                        Procedure for answering a numerical answer type (NAT) question: 
+                        <ol style="TEXT-ALIGN: left; PADDING-LEFT: 4%; PADDING-TOP: 3px " type="a">
+                           <li>To enter a numerical answer, use the virtual numeric keypad that appears below the question.</li>
+                           <li>A fractional number in the decimal notation (e.g. -0.3 or -.3) can be entered as an answer with or without '0' before the decimal point.</li>
+                           <li>To clear your answer, click on the <strong>Clear Response</strong> button.</li>
+                        </ol>
+                     </li>
+                     <li>To change your answer to a question that has already been answered, first select that question and then follow the usual procedure for answering any question.</li>
+                  </ol>
+               </li>
+            </ol>
+            <p><b><u>Saving your answer : </u></b></p>
+            <ol start="11" style="TEXT-ALIGN: left; LIST-STYLE-TYPE: decimal; PADDING-LEFT: 4%; PADDING-TOP: 3px ">
+               <li>To save your answer, you MUST click on the <strong>Save &amp; Next</strong> button. To mark the question for review, click on the <strong>Mark for Review &amp; Next </strong>button.</li>
+               <li>After the elapse of time scheduled for the examination (180 minutes), all the answers (including those “Answered and Marked for Review”) will be automatically submitted.</li>
+            </ol>
+            <p><b><u>Navigating through sections:</u></b></p>
+            <ol start="13" style="TEXT-ALIGN: left; LIST-STYLE-TYPE: decimal; PADDING-LEFT: 4%; PADDING-TOP: 3px ">
+               <li>Sections in this question paper are displayed above the Question Area. Questions in a section can be viewed by clicking on the section name. The section you are currently viewing is highlighted.</li>
+               <li>After clicking the <strong>Save &amp; Next</strong> button on the last question of any section, you will automatically be taken to the first question of the next section.</li>
+               <li>You can shuffle between sections and questions anytime during the examination.</li>
+               <li>You can see the section summary as a part of the legend appearing above the Question Palette of every section.</li>
+            </ol>
+         </div>
+      </div>
+      <div id="secondPagep1" style="display: none; padding-left: 8px">
+         <center>
+            <span id="otherImpInstru" style="display: none"><b><font size="4em" color="#2F72B7" class="otherInstruLabel">Other Important Instructions</font></b></span>
+         </center>
+         <br> 
+         <span id="secondPageLangView" style="float: right; display: none; padding: 2px;">
+            <span class="viewIn">View in :</span>&nbsp;
+            <select id="cusInst" onchange="parent.changeSysInst(this.value,'cusInstText','sysInstText')">
+               <option value="cusInstText1">English</option>
+            </select>
+         </span>
+         <div class="cusInstText1" style="height: 91%; width: 100%;">
+            <div style="text-align: center;"><span style="color:#001A50;"><span style="font-family: arial,helvetica,sans-serif;"><span style="font-size: 28px;"><strong><u>Paper Specific Instructions</u></strong></span></span></span></div>
+            <br><br><br> 
+            <div style="text-align: center;"><span style="font-size:16px;"><span style="font-family: arial,helvetica,sans-serif;"><strong>CS: Computer Science and Information Technology</strong></span></span></div>
+            <br> 
+            <p style="text-align:left;"><em>Duration</em> : <strong>180 minutes </strong><span style="float:right;"><em>Total Marks</em> : <strong>100</strong></span></p>
+            <div><strong>Read the following instructions carefully</strong></div>
+            <ol>
+               <li>Go through various question palette symbols and understand their meanings before starting the examination.</li>
+               <br>  
+               <li>After the start of the examination, you can view all the questions by clicking on the <strong>Question Paper</strong> button on the screen.</li>
+               <br>  
+               <li>This question paper consists of <strong>2 sections,</strong> General Aptitude (GA) section for<strong> 15 marks</strong> and the subject specific section <strong>(CS)</strong> for<strong> 85 marks</strong>. Both these sections are compulsory.</li>
+               <br>  
+               <li>The GA section consists of<strong> 10 </strong>questions. Question numbers 1 to 5 are of 1 mark each, while question numbers 6 to 10 are of 2 marks each.</li>
+               <br>  
+               <li>The subject specific<strong> CS</strong> section consists of <strong>55</strong> questions, out of which question numbers 1 to 25 are of 1 mark each, while question numbers 26 to 55 are of 2 marks each.</li>
+               <br>  
+               <li>Use the data given in the question while answering that question. If such data are not given, and the paper has useful data, then the same can be viewed by clicking on the <strong>Useful Data</strong> button that appears at the top, right-hand side of the screen.</li>
+               <br>  
+               <li>The question paper consists of<strong> Multiple Choice Questions (MCQ)</strong> and <strong>Numerical Answer Type (NAT)</strong>.<br>  <br>  a) Multiple choice type questions have four choices A, B, C, D, out of which only <strong>ONE</strong> is the correct answer. Select the answer by clicking on the radio button <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAARCAIAAACjLUBkAAACj0lEQVQ4ja2UXUiTURjHdyliCNFV4cduihDMbvTGD5aFhEhEYIVoGNpKzVZDs6iULcvKmRNfTWm2TWKp0RxlqNMwlVhqSy03ys00bW6msdU+nfPfxftu75S5uvB/8z7P/5zze87hPOdlIKjsxrnhN10dzzvaX/RM6BdWg88GADCor8cgqKoYNjj9YFO3j+bzm8SNzU0NBEE0NLe0iArOnRYOGvzXO6baC8XvAxDnu/gpqcRvr2scFmVlX+ifc2KzLF28i5z6lw7amczceUSxvJlorU6LY782UZ6u/VQhX7/1CUek/OtCpdubKkqSE2+pNhJtg4mhSd0rAACn7hq7bMjo2ZIHAKut93ky1SKZ/FCU7Y4pWvSuYACwvC0P2ZX3DQCgVxCllfKgOABwfZClV7RRsebJvj1JYxY/orrqWNjh2jUAgLyR82BgOSBlo77mpN/9SYZWVUpkrFjzx0dcf5V3MIRVS+66npvRNh38yKRWauOy+1wAANsIKzTi3oCR3mN3QXxIqnAdACC5k9Oq/Z+2M1UlcNRkaB9lhTMFQyaaqBef3RFfaQMA9BKlNyRf/g10qlnZQuq6l/sSouM6v6/SRPfHh6FhJzUAAPNE51V+syMwhtaMvK6YUJKxVVXHjMjQ2kAT4RpNDo8UfiJL2mQ3OTzlfDCefbqcyx9bIu8SWgk7ilVt9Q5Sb0aSG3tIMEl5bh0vP0s6bkFArRmaSs6L3hm9uefRiZhM6YxvnCKu6TpTD+Sqfc9wfaGm9MyVS4/HDSu+qS6zqaejhsu+/OyzmS4w+3R/dNGsX0XvnwJOrWZiye7fNw7tQL+sUXA8LYHJZEbtTS6urJPKu3XmDb3lMc+Ozv3ydxjYbm0/8S+ZdbcxTWJrUQAAAABJRU5ErkJgggA="> placed before the choice, with the help of the mouse.<br>  b) For numerical answer type questions, a numerical answer should be entered with the help of the mouse and the virtual numeric keypad, which will appear below the question.</li>
+               <br>  
+               <li>All those questions that are not attempted will carry zero marks. However, wrong answers for multiple choice type questions (MCQ) will carry <strong>NEGATIVE </strong>marks. For multiple choice type questions, a wrong answering will lead to deduction of <span style="font-size:22px;"><em><strong>⅓</strong></em></span> marks for a 1-mark question and <span style="font-size:22px;"><em><strong>⅔</strong></em></span> marks for a 2-mark question. There is no negative marking for NAT questions.</li>
+               <br>  
+               <li>Your answers will be saved on the server periodically and also at the end of the examination. The examination will <strong>stop automatically</strong> at the end of <strong>180 minutes.</strong></li>
+               <br>  
+               <li>You are not allowed to leave the examination hall until the completion of the examination.</li>
+               <br>  
+               <li>Charts, graph sheets, calculators and mathematical tables are NOT allowed in the examination hall. You must use the scribble pad provided to you in the examination hall for your rough work, which must be returned at the end of the examination.</li>
+            </ol>
+         </div>
+      </div>
+   </body>
+   <script type="text/javascript" src="js/jquery-1.8.0.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</html>

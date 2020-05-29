@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <title>Online Exam</title>
+      <script>
+        var ready=false;
+        function linkDisp(){
+            
+            if($("#defaultLanguage").val()!=0) { $('#readylink').prop('disabled', ready);}
+            if(ready==true){ready=false;}
+            else{ready=true;}
+        }
+        function startup(){
+            $('#PreviousInst').hide();
+            $('#secondPagep2').hide();
+            $('#readylink').hide();
+            $('#readylink').prop('disabled', true);
+        }
+        
+        function showInstr(page){
+                if(page=="next"){
+                    $('#iframeId').contents().find("#firstPage").hide();
+                    $('#iframeId').contents().find("#secondPagep1").show();
+                    $("#secondPagep2").show();
+                    page="previous";
+                    $("#instPagination").hide();
+                    $('#PreviousInst').show();
+                    $('#secondPagep2').show();
+                    $('#readylink').show();
+                    
+                }else if(page=="previous"){
+                    $('#iframeId').contents().find("#secondPagep1").hide();
+                    $("#secondPagep2").hide();
+                    $('#iframeId').contents().find("#firstPage").show();
+                    page="next";
+                    $("#instPagination").show();
+                    $('#PreviousInst').hide();
+                    $('#secondPagep2').hide();
+                    $('#readylink').hide();
+                
+                }
+               
+            }
+         
+</script>
+   </head>
+   <body onload="startup()">
+      <div class="container-fluid">
+         <nav class="navbar navbar-light bg-primary">
+            <span class="navbar-brand mb-0 h1 text-white font-weight-bold">Information Technology RGPV Exam</span>
+         </nav>
+         <div class="jumbotron jumbotron-fluid bg-dark text-white p-0">
+            <div class="row ">
+               <div class="col p-5">
+                  <h5 class="m-4">Candidate Name : <span class="text-warning">Kunal Rathore</span></h5>
+                  <h5 class="m-4">Email Address : <span class="text-warning">  Kunalrathore.it@gmail.com</span> </h5>
+                  <h5 class="m-4">Exam Subject : <span class="text-warning">Computer Networks</span> </h5>
+               </div>
+               <div class="col">
+                  <video id="video" class="border border-warning float-right mr-5" width="340" height="280" autoplay></video>
+               </div>
+            </div>
+         </div>
+         <nav class="navbar navbar-light bg-primary">
+            <span class="navbar-brand mb-0 h1 text-white font-weight-bold"> General Instructions </span>
+         </nav>
+         <div id="mainleft" style="height: 915px;">
+            <div id="commonPageInstruction" style="height: 805px;">
+               <iframe id="iframeId" src="{% url 'instructions' }" style="height:100%;width:100%;border:none;border-bottom:1px #CCC solid;"></iframe>
+            </div>
+            <div id="secondPagep2" style="padding-left: 15px;">
+				
+					<div id="defaultLangOptions" class="mt-4 mark">
+						<span id="defLang">Choose your default language :</span>
+						<select id="defaultLanguage">
+                     <option value="0">-- Select --</option>
+                     <option value="1">English</option>
+                  </select>
+						<br><span class="mark" id="multiLangInstru">Please note all questions will appear in your default language. This language can be changed for a particular question later on.</span>
+					</div>
+					
+					<br>
+					
+					<input type="checkbox" id="disclaimer" onclick="linkDisp();" class="mt-1 float-left"> 
+					<span class="w-98 ml-1 mark" id="agreementMessageCustom"><strong>Declaration by the Candidate:</strong> I have read and understood all the instructions. All the computer hardware allotted to me are in proper working condition. I declare that I am not carrying any prohibited gadgets like mobile phone, bluetooth devices, wrist watches, etc. and any prohibited material with me into the examination hall. I agree that if found to be non-complaint with the above declaration, I shall be liable to be debarred from this examination and / or to disciplinary action, which may include ban from future examinations / tests.</span>
+					</label>
+					
+			</div>
+            <div class="row ">
+                <div class="col">
+                    <button id="PreviousInst" class="btn btn-outline-danger border float-left m-3" onclick="showInstr('previous')"><i class="fa fa-caret-left"></i><b class="h5 font-weight-bold"> Previous</b></button>
+                 </div>
+                 <div class="col">
+                    <button id="readylink" class="btn btn-outline-success border m-3 ml-auto" href="{% url 'onlineexam' %}"><b class="h5 font-weight-bold">Start Test </b><i class="fa fa-caret-right"></i></button>
+                 </div>
+                <div class="col">
+                   <button id="instPagination" class="btn btn-outline-danger border float-right m-3" onclick="showInstr('next')"><b class="h5 font-weight-bold">Next </b><i class="fa fa-caret-right"></i></button>
+                </div>
+            </div>
+         </div>
+         
+      </div>
+      <!-- Optional JavaScript -->
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script>
+         const constraints = {
+           video: true
+         };
+         
+         const video = document.querySelector('video');
+         
+         navigator.mediaDevices.getUserMedia(constraints).then((stream) => {video.srcObject = stream});
+      </script>
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+   </body>
+</html>
