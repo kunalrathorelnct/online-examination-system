@@ -14,7 +14,7 @@
           </div>
           <div class="row border pl-3 pt-1 m-4">
             <h6 class="mark h4">{%if questions %}
-                {% for question in questions.object_list %}
+                {% for question in questions %}
                 {{ question.question_text}}
                 {% endfor %}
               {%endif%}

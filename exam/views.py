@@ -14,7 +14,7 @@ def onlineexam(request,uid=None):
 		else:
 			return HttpResponse("Invalid Request")
 		student_object.start_time = timezone.now()
-		sections = student_object.exam.sections
+		sections = student_object.exam.no_of_sections
 		return render(request,'quiz.html',{'uid':uid,'sections':sections})
 	
 def iframeview(request,uid):
@@ -24,7 +24,7 @@ def iframeview(request,uid):
 		section = 1
 	uid = uid
 	exam = Student_Exam.objects.get(external_identifier=uid).exam
-	questions = Question.objects.filter(exam=exam,section_no =section)
+	questions = Question.objects.filter(exam=exam,section =section)
 	return render(request,'iframesquestionpaper.html',{'questions':questions})
 
 def examView(request,uid):
