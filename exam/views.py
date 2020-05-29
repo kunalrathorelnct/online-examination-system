@@ -31,11 +31,9 @@ def examView(request,uid):
 	if request.method=='GET':
 		student_object = Student_Exam.objects.get(external_identifier = uid)
 		if student_object.exam.start_time<=timezone.now():
-			name = student_object.student.name
-			email = student_object.student.email
-			roll_no = student_object.student.roll_no
-			subject_name = student_object.exam.subject_name
-			return render(request,'index.html',{'name':name,'email':email,'uid':uid,'roll_no':roll_no,'subject_name':subject_name})
+			student =student_object.student
+			exam = student_object.exam
+			return render(request,'index.html',{'student':student,'exam':exam,'uid':uid})
 		else:
 			return HttpResponse("Start time is "+str(student_object.start_time)+"Or paper was Over")
 	return HttpResponse("Only Get Allowded")
@@ -65,3 +63,10 @@ class StudentResponse(APIView):
 		student_response.save()
 		return Response({'status':'ok'})
 
+class PhotoUploadView(APIView):
+	def post(self, request,uid, *args, **kwargs):
+		ss = request.data['file']
+		student_object = Student_Exam.objects.get(external_identifier = uid)
+		student_object.ss = ss
+		student_object.save()
+		return Response({'status':'ok'})

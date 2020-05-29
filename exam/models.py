@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+import datetime
 # Create your models here.
 
 
@@ -32,8 +33,8 @@ class Section(models.Model):
 		return self.section_name
 
 class Student_Exam(models.Model):
-	def file_path(self,filename):
-		return "{0}/{1}/{2}".format(self.exam.exam_code,self.student.name,filename)
+	def file_path_ss(self,filename):
+		return "students/{0}/{1}/{2}".format(self.exam.subject_name,self.student.roll_no,str(datetime.datetime.now())+'.png')
 
 	student = models.ForeignKey(Student,on_delete=models.CASCADE)
 	exam = models.ForeignKey(Exam,on_delete=models.CASCADE)
@@ -41,14 +42,14 @@ class Student_Exam(models.Model):
 	warning_count = models.IntegerField(default=0)
 	start_time = models.DateTimeField(null=True,blank=True)
 	end_time = models.DateTimeField(null=True,blank=True)
-	ss = models.FileField(null=True,blank=True,upload_to = file_path)
+	ss = models.FileField(null=True,blank=True,upload_to = file_path_ss)
 
 	def __str__(self):
 		return self.exam.subject_name+'_'+str(self.student.roll_no)
 
 class Question(models.Model):
 	def file_path(self,filename):
-		return "{0}/{1}/{2}".format(self.exam.subject_name,self.question_text[:5],filename)
+		return "/{0}/{1}/{2}".format(self.exam.subject_name,self.question_text[:5],filename)
 
 	question_choice = (
 		('single_choice','single_choice'),
