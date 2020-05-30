@@ -11,16 +11,18 @@
       <link rel="stylesheet" href="{% static 'css/aecInstructions.css' %}">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <title>Online Exam</title>
+      <script src="{% static 'js/ques.js' %}"></script>
       <style>
         body{
             overflow-x: hidden;
+
         }
       .container-fluid{
           height: 685px;
       }
       </style>
    </head>
-   <body>
+   <body onload="load()">
       <div class="container-fluid p-0">
         <div class="row bg-dark text-white font-weight-bold p-3">
             <div class="col text-warning"><i class="fa fa-book pr-2 mt-1" aria-hidden="true"></i> Subject : Information Technology</div>
@@ -61,13 +63,13 @@
                 </div>
                 <div class="row ">
                     <div class="col">
-                        <button id="PreviousInst" class="btn btn-white border float-left m-3">Mark for Review & Next</button>
+                        <button id="PreviousInst" onclick="markedreview()" class="btn btn-white border float-left m-3">Mark for Review & Next</button>
                         </div>
                         <div class="col">
                         <button id="readylink" class="btn btn-white border m-3 ml-auto">Clear Response</button>
                         </div>
                     <div class="col">
-                        <button id="instPagination" class="btn border float-right m-3">Save & Next</button>
+                        <button id="instPagination" onclick="savenext()" class="btn border float-right m-3">Save & Next</button>
                     </div>  
                 </div>
         
@@ -102,20 +104,7 @@
                     <h6><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Aptitude</h6>
                 </div>
                 <div class="row m-3">
-                    <a class="not_visited">1</a>
-                    <a class="not_visited">1</a>
-                    <a class="not_visited">1</a>
-                    <a class="not_visited">1</a>
-                    <a class="not_visited">1</a>
-                    <a class="not_visited">1</a>
-                    <a class="not_visited">1</a>
-                    <a class="not_visited">1</a>
-                    <a class="not_visited">1</a>
-                    <a class="not_visited">1</a>
-                    <a class="not_visited">1</a>
-                    <a class="not_visited">1</a>
-
-                    
+                    <a class="normal" id="id1">1</a>
                 </div>
 
                 <div class="row bg-white text-primary mt-3 p-1 justify-content-center">
@@ -128,6 +117,30 @@
          
          
       </div>
+      <script>
+          var iframe = document.getElementById("iframeId");
+          $("input[type=checkbox]").is(":checked");
+          var ele=iframe.contentWindow.document.getElementByName("exampleRadios");
+         
+          function load(){
+            var elmnt = document.getElementById("id1");
+            elmnt.className="normal not_visited";
+          }
+         function markedreview() {
+            console.log(ele)
+            if(ele.checked){
+                var elmnt = document.getElementById("id1");
+                elmnt.className="normal not_visited";
+            }
+            
+         }
+         function savenext() {
+            var iframe = document.getElementById("iframeId");
+            var elmnt = document.getElementById("id1");
+            elmnt.className="normal answer_marked";
+         }
+
+      </script>
       <!-- Optional JavaScript -->
       <!-- jQuery first, then Popper.js, then Bootstrap JS -->
       <script>
