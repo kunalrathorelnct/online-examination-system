@@ -11,11 +11,13 @@ def onlineexam(request,uid=None):
 	if request.method=='GET':
 		if uid:
 			student_object = Student_Exam.objects.get(external_identifier = uid)
+			exam = student_object.exam
+			questions = Question.objects.filter(exam=exam)
 		else:
 			return HttpResponse("Invalid Request")
 		student_object.start_time = timezone.now()
 		sections = student_object.exam.no_of_sections
-		return render(request,'quiz.html',{'uid':uid,'sections':sections})
+		return render(request,'quiz.html',{'uid':uid,'sections':sections,'questions':questions,'exam':exam,'range':range(1,len(questions)+1)})
 	
 def iframeview(request,uid):
 	try:

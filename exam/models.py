@@ -49,7 +49,7 @@ class Student_Exam(models.Model):
 
 class Question(models.Model):
 	def file_path(self,filename):
-		return "/{0}/{1}/{2}".format(self.exam.subject_name,self.question_text[:5],filename)
+		return "{0}/{1}/{2}".format(str(''.join(self.exam.subject_name.split())),self.question_text[:5],filename)
 
 	question_choice = (
 		('single_choice','single_choice'),
