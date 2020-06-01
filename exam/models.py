@@ -1,13 +1,16 @@
 from django.db import models
 import uuid
 import datetime
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 # Create your models here.
+from django.core.mail import send_mail
 
 
 class Student(models.Model):
-	email = models.EmailField(primary_key=True)
+	email = models.EmailField(primary_key=True,unique=True)
 	name = models.CharField(max_length=50)
-	roll_no = models.CharField(max_length=20)
+	roll_no = models.CharField(max_length=20,unique=True)
 
 	def __str__(self):
 		return self.roll_no
@@ -44,6 +47,9 @@ class Student_Exam(models.Model):
 	start_time = models.DateTimeField(null=True,blank=True)
 	end_time = models.DateTimeField(null=True,blank=True)
 	ss = models.FileField(null=True,blank=True,upload_to = file_path_ss)
+
+	class Meta:
+		unique_together = ['student','exam']
 
 	def __str__(self):
 		return self.exam.subject_name+'_'+str(self.student.roll_no)
@@ -82,3 +88,14 @@ class Student_Response(models.Model):
 
 	def __str__(self):
 		return self.student_exam.exam.subject_name+'_'+str(self.student_exam.student.roll_no)+"_"+str(self.question)
+
+@receiver(post_save,sender=Student_Exam)
+def send_email(sender,**kwargs):
+	if kwargs.get('created'):
+		instance = kwargs.get('instance')
+		send_mail(
+				'Online-Exam by Chinmay',
+				'There is your exam on '+str(instance.exam.start_time)+'Your link yo start test is 127.0.0.1/exam/info/'+str(instance.external_identifier),
+				'chinmay1305@gmail.com',
+				[instance.student.email]
+			)

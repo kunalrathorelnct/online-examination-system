@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
-def onlineexam(request,uid=None):
+def onlineexam(request,uid):
 	if request.method=='GET':
 		if uid:
 			student_object = Student_Exam.objects.get(external_identifier = uid)
@@ -48,7 +48,6 @@ def examView(request,uid):
 		else:
 			return HttpResponse("Start time is "+str(student_object.start_time)+"Or paper was Over")
 	return HttpResponse("Only Get Allowded")
-
 
 class StudentQuizView(APIView):
 	def get(self,request,uid):
