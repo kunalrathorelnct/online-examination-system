@@ -29,13 +29,22 @@ def iframeview(request,uid):
 	questions = Question.objects.filter(exam=exam,section =section)
 	return render(request,'iframesquestionpaper.html',{'questions':questions})
 
+def infoView(request,uid):
+	if request.method=='GET':
+		student_object = Student_Exam.objects.get(external_identifier = uid)
+		exam = student_object.exam
+		duration = str(exam.total_duration/1000/1000)[-3:]	
+		sections = Section.objects.filter(exam=exam)
+		return render(request,'iframesInstruction.html',{'student_object':student_object,'exam':exam,'sections':sections,'duration':duration})
+
+
 def examView(request,uid):
 	if request.method=='GET':
 		student_object = Student_Exam.objects.get(external_identifier = uid)
 		if student_object.exam.start_time<=timezone.now():
 			student =student_object.student
-			exam = student_object.exam
-			return render(request,'index.html',{'student':student,'exam':exam,'uid':uid})
+			subject_name = student_object.exam.subject_name
+			return render(request,'index.html',{'student':student,'subject_name':subject_name,'uid':uid})
 		else:
 			return HttpResponse("Start time is "+str(student_object.start_time)+"Or paper was Over")
 	return HttpResponse("Only Get Allowded")

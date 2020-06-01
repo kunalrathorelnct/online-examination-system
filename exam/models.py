@@ -19,7 +19,7 @@ class Exam(models.Model):
 	total_duration = models.DurationField()
 	total_marks = models.IntegerField(default=100)
 	negative_marks = models.IntegerField(default=0)
-	no_of_sections = models.IntegerField(default=1)
+	no_of_sections = models.IntegerField(default=0)
 	def __str__(self):
 		return self.subject_name
 
@@ -27,6 +27,7 @@ class Section(models.Model):
 	exam = models.ForeignKey(Exam,on_delete = models.CASCADE)
 	section_name = models.CharField(max_length=20)
 	section_duration = models.DurationField()
+	no_of_questions = models.IntegerField(default=0)
 	total_marks = models.IntegerField(default=100)
 
 	def __str__(self):
@@ -61,8 +62,9 @@ class Question(models.Model):
 	question_text = models.TextField()
 	ex_img = models.FileField(null=True,blank=True,upload_to = file_path)
 	question_type = models.CharField(max_length=20,choices=question_choice,default="single_choice")
-	section = models.ForeignKey(Section,on_delete = models.CASCADE,null=True)
+	section = models.ForeignKey(Section,on_delete = models.CASCADE,null=True,blank=True)
 	marks = models.IntegerField(default=4)
+	negative_marks = models.IntegerField(default=0)
 	choices = models.CharField(max_length = 100,blank=True,null=True)
 		
 
