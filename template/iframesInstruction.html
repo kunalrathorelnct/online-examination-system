@@ -9,19 +9,13 @@
 
    <body>
       <div id="firstPage" style="padding-left: 13px">
-         <span style="float: right; display: none; padding: 2px;">
-            <span class="viewIn">View in :</span>&nbsp;
-            <select id="basInst" onchange="parent.changeSysInst(this.value,'sysInstText','cusInstText')">
-               <option value="sysInstText1">English</option>
-            </select>
-         </span>
          <div class="sysInstText1" style="height: 93%; width: 100%;">
             <div>
                <p style="text-align: center;"><span style="color:#001A50;"><span style="font-size: 28px;"><span style="font-family: arial,helvetica,sans-serif;"><strong><u>General Instructions</u></strong></span></span></span></p>
                <center style="text-align: left;"><strong><font size="4">Read the following instructions carefully </font></strong></center>
             </div>
             <ol style="TEXT-ALIGN: left; LIST-STYLE-TYPE: decimal; PADDING-LEFT: 4%; PADDING-TOP: 3px">
-               <li>Total duration of the examination is <strong>180</strong> minutes. Calculator is available on top, right-hand side of the screen.</li>
+               <li>Total duration of the examination is <strong>{{ duration }}</strong> minutes. Calculator is available on top, right-hand side of the screen.</li>
                <li>The clock will be set at the server. The countdown timer at the top, right-hand side of the screen will display the time available for you to complete the examination. When the timer reaches zero, the examination will end automatically. You will not be required to end or submit your examination.</li>
                <li>
                   The Question Palette displayed on the right-hand side of the screen will show the status of each question using one of the following symbols: 
@@ -86,7 +80,7 @@
             <p><b><u>Saving your answer : </u></b></p>
             <ol start="11" style="TEXT-ALIGN: left; LIST-STYLE-TYPE: decimal; PADDING-LEFT: 4%; PADDING-TOP: 3px ">
                <li>To save your answer, you MUST click on the <strong>Save &amp; Next</strong> button. To mark the question for review, click on the <strong>Mark for Review &amp; Next </strong>button.</li>
-               <li>After the elapse of time scheduled for the examination (180 minutes), all the answers (including those “Answered and Marked for Review”) will be automatically submitted.</li>
+               <li>After the elapse of time scheduled for the examination ({{duration }} minutes), all the answers (including those “Answered and Marked for Review”) will be automatically submitted.</li>
             </ol>
             <p><b><u>Navigating through sections:</u></b></p>
             <ol start="13" style="TEXT-ALIGN: left; LIST-STYLE-TYPE: decimal; PADDING-LEFT: 4%; PADDING-TOP: 3px ">
@@ -111,28 +105,38 @@
          <div class="cusInstText1" style="height: 91%; width: 100%;">
             <div style="text-align: center;"><span style="color:#001A50;"><span style="font-family: arial,helvetica,sans-serif;"><span style="font-size: 28px;"><strong><u>Paper Specific Instructions</u></strong></span></span></span></div>
             <br><br><br> 
-            <div style="text-align: center;"><span style="font-size:16px;"><span style="font-family: arial,helvetica,sans-serif;"><strong>CS: Computer Science and Information Technology</strong></span></span></div>
+            <div style="text-align: center;"><span style="font-size:16px;"><span style="font-family: arial,helvetica,sans-serif;"><strong>{{exam.subject_name}}</strong></span></span></div>
             <br> 
-            <p style="text-align:left;"><em>Duration</em> : <strong>180 minutes </strong><span style="float:right;"><em>Total Marks</em> : <strong>100</strong></span></p>
+            <p style="text-align:left;"><em>Duration</em> : <strong>{{duration}} minutes </strong><span style="float:right;"><em>Total Marks</em> : <strong>{{exam.total_marks}}</strong></span></p>
             <div><strong>Read the following instructions carefully</strong></div>
             <ol>
                <li>Go through various question palette symbols and understand their meanings before starting the examination.</li>
                <br>  
                <li>After the start of the examination, you can view all the questions by clicking on the <strong>Question Paper</strong> button on the screen.</li>
                <br>  
-               <li>This question paper consists of <strong>2 sections,</strong> General Aptitude (GA) section for<strong> 15 marks</strong> and the subject specific section <strong>(CS)</strong> for<strong> 85 marks</strong>. Both these sections are compulsory.</li>
-               <br>  
-               <li>The GA section consists of<strong> 10 </strong>questions. Question numbers 1 to 5 are of 1 mark each, while question numbers 6 to 10 are of 2 marks each.</li>
-               <br>  
-               <li>The subject specific<strong> CS</strong> section consists of <strong>55</strong> questions, out of which question numbers 1 to 25 are of 1 mark each, while question numbers 26 to 55 are of 2 marks each.</li>
+               <li>This question paper consists of <strong>{% if exam.no_of_sections %}{{exam.no_of_sections}} sections,{% else %} 1 section {% endif %}</strong>
+                 {% if sections %} 
+                  {% for section in sections %}
+                {{section.section_name}} section for<strong> {{section.total_marks}} marks.</strong> All these sections are compulsory.
+                {% endfor %}
+                {% else %}
+                     consisting of {{ exam.total_marks}}
+                {% endif %}
+             </li>
+               <br>
+               {% if sections %}
+               {% for section in sections %}  
+               <li>The {{section.section_name}} section consists of<strong> {{section.no_of_questions}} </strong>questions.</li>
+               {% endfor %}
+               {% endif %}
                <br>  
                <li>Use the data given in the question while answering that question. If such data are not given, and the paper has useful data, then the same can be viewed by clicking on the <strong>Useful Data</strong> button that appears at the top, right-hand side of the screen.</li>
                <br>  
                <li>The question paper consists of<strong> Multiple Choice Questions (MCQ)</strong> and <strong>Numerical Answer Type (NAT)</strong>.<br>  <br>  a) Multiple choice type questions have four choices A, B, C, D, out of which only <strong>ONE</strong> is the correct answer. Select the answer by clicking on the radio button <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAARCAIAAACjLUBkAAACj0lEQVQ4ja2UXUiTURjHdyliCNFV4cduihDMbvTGD5aFhEhEYIVoGNpKzVZDs6iULcvKmRNfTWm2TWKp0RxlqNMwlVhqSy03ys00bW6msdU+nfPfxftu75S5uvB/8z7P/5zze87hPOdlIKjsxrnhN10dzzvaX/RM6BdWg88GADCor8cgqKoYNjj9YFO3j+bzm8SNzU0NBEE0NLe0iArOnRYOGvzXO6baC8XvAxDnu/gpqcRvr2scFmVlX+ifc2KzLF28i5z6lw7amczceUSxvJlorU6LY782UZ6u/VQhX7/1CUek/OtCpdubKkqSE2+pNhJtg4mhSd0rAACn7hq7bMjo2ZIHAKut93ky1SKZ/FCU7Y4pWvSuYACwvC0P2ZX3DQCgVxCllfKgOABwfZClV7RRsebJvj1JYxY/orrqWNjh2jUAgLyR82BgOSBlo77mpN/9SYZWVUpkrFjzx0dcf5V3MIRVS+66npvRNh38yKRWauOy+1wAANsIKzTi3oCR3mN3QXxIqnAdACC5k9Oq/Z+2M1UlcNRkaB9lhTMFQyaaqBef3RFfaQMA9BKlNyRf/g10qlnZQuq6l/sSouM6v6/SRPfHh6FhJzUAAPNE51V+syMwhtaMvK6YUJKxVVXHjMjQ2kAT4RpNDo8UfiJL2mQ3OTzlfDCefbqcyx9bIu8SWgk7ilVt9Q5Sb0aSG3tIMEl5bh0vP0s6bkFArRmaSs6L3hm9uefRiZhM6YxvnCKu6TpTD+Sqfc9wfaGm9MyVS4/HDSu+qS6zqaejhsu+/OyzmS4w+3R/dNGsX0XvnwJOrWZiye7fNw7tQL+sUXA8LYHJZEbtTS6urJPKu3XmDb3lMc+Ozv3ydxjYbm0/8S+ZdbcxTWJrUQAAAABJRU5ErkJgggA="> placed before the choice, with the help of the mouse.<br>  b) For numerical answer type questions, a numerical answer should be entered with the help of the mouse and the virtual numeric keypad, which will appear below the question.</li>
                <br>  
-               <li>All those questions that are not attempted will carry zero marks. However, wrong answers for multiple choice type questions (MCQ) will carry <strong>NEGATIVE </strong>marks. For multiple choice type questions, a wrong answering will lead to deduction of <span style="font-size:22px;"><em><strong>⅓</strong></em></span> marks for a 1-mark question and <span style="font-size:22px;"><em><strong>⅔</strong></em></span> marks for a 2-mark question. There is no negative marking for NAT questions.</li>
+               <li>All those questions that are not attempted will carry zero marks. {% if exam.negative_marks%}However, wrong answers for multiple choice type questions (MCQ) will carry <strong>NEGATIVE </strong>marks. For multiple choice type questions, a wrong answering will lead to deduction of <span style="font-size:22px;"><em><strong>{{exam.negative_marks}}</strong></em></span>{% else %}  There is no negative marking for questions.{% endif %}</li>
                <br>  
-               <li>Your answers will be saved on the server periodically and also at the end of the examination. The examination will <strong>stop automatically</strong> at the end of <strong>180 minutes.</strong></li>
+               <li>Your answers will be saved on the server periodically and also at the end of the examination. The examination will <strong>stop automatically</strong> at the end of <strong>{{duration}} minutes.</strong></li>
                <br>  
                <li>You are not allowed to leave the examination hall until the completion of the examination.</li>
                <br>  
