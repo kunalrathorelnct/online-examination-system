@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'exam',
     'rest_framework',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -127,8 +128,8 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = MEDIA_DIR
-
-STATICFILES_DIRS = [STATIC_DIR,]
+STATIC_ROOT = STATIC_DIR
+#STATICFILES_DIRS = [STATIC_DIR,]
 
 #Email Setting
 EMAIL_HOST = 'smtp.gmail.com'
