@@ -31,10 +31,7 @@ $(document).ready(function() {
         
 
     });
-    $("#instructions").click(function(){
-        $("#overlay").removeClass("d-none");
-        $("#overlayframe1").html("<iframe id='iframeId' src='{% url 'exam:iframe' uid %}' style='height:100%;width:100%;border:none;border-bottom:1px #CCC solid;'></iframe>");
-    });
+    
     $("#close").click(function(){
         $("#overlay").addClass("d-none");
     });

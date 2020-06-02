@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse
-from .models import Student_Exam,Question,Section
+from .models import *
 # Create your views here.
 from django.utils import timezone
 from .serializers import *
@@ -77,6 +77,6 @@ class PhotoUploadView(APIView):
 	def post(self, request,uid, *args, **kwargs):
 		ss = request.data['file']
 		student_object = Student_Exam.objects.get(external_identifier = uid)
-		student_object.ss = ss
-		student_object.save()
+		img_upload = ProcteredSS(student_exam=student_object,img=ss)
+		img_upload.save()
 		return Response({'status':'ok'})
