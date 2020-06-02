@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse
-from .models import Student_Exam,Question
+from .models import Student_Exam,Question,Section
 # Create your views here.
 from django.utils import timezone
 from .serializers import *

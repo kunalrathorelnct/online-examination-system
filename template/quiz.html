@@ -11,48 +11,53 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/aecInstructions.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
     <title>Online Exam</title>
-    <script src="{% static 'js/ques.js' %}"></script>
+    
     <style>
         body {
             overflow-x: hidden;
 
         }
-
         .container-fluid {
             height: 685px;
         }
     </style>
 </head>
 
-<body onload="load()">
-    <div class="container-fluid p-0">
+<body>
+    <div id="overlay" class="container-fluid d-none w-100 h-100">
+        <div id="overlayframe">
+            <div id='close'>X</div> 
+            <div id="overlayframe1"></div>
+        </div>
+        
+
+    </div>
+    <div id="main" class="container-fluid p-0">
         <div class="row bg-dark text-white font-weight-bold p-3">
-            <div class="col text-warning"><i class="fa fa-book pr-2 mt-1" aria-hidden="true"></i> Subject : Information
-                Technology</div>
-            <div class="col d-flex justify-content-center"><i class="fa fa-pencil-square-o pr-2 mt-1"
-                    aria-hidden="true"></i> Instructions</div>
-            <div class="col d-flex justify-content-center"><i class="fa fa-question-circle pr-2 mt-1"
-                    aria-hidden="true"></i> Questions</div>
+            <div class="col text-warning"><i class="fa fa-book pr-2 mt-1" aria-hidden="true"></i> Subject : {{exam.subject_name}}</div>
+            <div id="instructions" class="col d-flex justify-content-center"><i class="fa fa-pencil-square-o pr-2 mt-1" aria-hidden="true"></i> Instructions</div>
+            <div id="questiontab" class="col d-flex justify-content-center"><i class="fa fa-question-circle pr-2 mt-1" aria-hidden="true"></i> Questions</div>
         </div>
         <div class="row h-100">
             <div class="col-10">
                 <div class="row border p-1 bg-white font-weight-bold text-white">
                     <div class="col">
                         <a class="btn border btn-white text-primary active"><i class="fa fa-bookmark-o"
-                                aria-hidden="true"></i> Section I</a>
+                                aria-hidden="true"></i> {{exam.subject_name}}</a>
                     </div>
                     <div class="col">
-                        <a class="btn border float-right"><i class="fa fa-calculator text-warning"
-                                aria-hidden="true"></i></a>
+                        <a id="calculator" class="btn border float-right"><i class="fa fa-calculator text-warning" aria-hidden="true"></i></a>
                     </div>
                 </div>
                 <div class="row border p-1 bg-white font-weight-bold text-white">
                     <div class="col">
+                        {% for sectionname in sectionnames %}
                         <a class="btn border btn-white text-primary active"><i class="fa fa-pencil-square-o"
-                                aria-hidden="true"></i> Aptitude </a>
-                        <a class="btn border btn-white text-primary active"><i class="fa fa-pencil-square-o"
-                                aria-hidden="true"></i> Aptitude </a>
+                                aria-hidden="true"></i> {{sectionname.section_name}} </a>
+                        {% endfor %}
+    
                     </div>
                     <div class="col">
                         <a class=" float-right"><i class="fa fa-clock-o text-warning" aria-hidden="true"></i>
@@ -62,28 +67,26 @@
                 </div>
                 <div class="row ml-1 mark bg-white">
                     <div class="col text-danger">
-                        <small><b>Question Type : <h4 id="quesType">MCQ<h4></b></small>
+                        <small><b>Question Type : <span id="quesType">MCQ</span></b></small>
                     </div>
                     <div class="col">
-                        <small class="float-right">Marks for Correct Answer <h5 id="quesMarks"></h5> | Marks for Wrong Answer -1</small>
+                        <small class="float-right">Marks for Correct Answer <span id="quesMarks"></span> | Marks for Wrong Answer <span id="NegetivequesMarks">-1</span> </small>
                     </div>
                 </div>
                 <div class="row h-100">
                     <div class="col">
-                        <iframe id="iframeId" class="w-100 h-100" src="{% url 'exam:iframe' uid %}"></iframe>
+                        <iframe id="iframeid" class="w-100 h-100" src="{% url 'exam:iframe' uid %}"></iframe>
                     </div>
                 </div>
                 <div class="row ">
                     <div class="col">
-                        <button id="PreviousInst" onclick="markedreview()"
-                            class="btn btn-white border float-left m-3">Mark for Review & Next</button>
+                        <button id="reviewNext"class="btn btn-white border float-left m-3">Mark for Review & Next</button>
                     </div>
                     <div class="col">
-                        <button id="readylink" class="btn btn-white border m-3 ml-auto">Clear Response</button>
+                        <button id="clearResponse" class="btn btn-white border m-3 ml-auto">Clear Response</button>
                     </div>
                     <div class="col">
-                        <button id="instPagination" onclick="savenext()" class="btn border float-right m-3">Save &
-                            Next</button>
+                        <button id="saveNext" class="btn border float-right m-3">Save & Next</button>
                     </div>
                 </div>
 
@@ -110,23 +113,23 @@
                     </div>
                     <div class="row w-100">
                         <small><span class="review_marked_considered"
-                                title="Answered &amp; Marked for Review">5</span>Answered & Marked for Review Consider
-                            for Evalution</small>
+                                title="Answered &amp; Marked for Review">5</span>Answered & Marked for Review Consider for Evalution</small>
                     </div>
 
                 </div>
 
-                <div class="row bg-white text-primary border mt-3 p-1    justify-content-center">
+                <div class="row bg-white text-primary border mt-3 p-1 justify-content-center">
                     <h6><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Aptitude</h6>
                 </div>
-                {% for i in range %}
+                
                 <div class="row m-3">
-                    <a class="normal" id="id{{i}}" href="javascript:;" onclick="changeQuestion('{{i}}');">{{i}}</a>
+                    
+                    {% for question in questions %}
+                    <a class="normal not_visited" onclick="$panelClick($(this));" id="panel{{question.id}}">{{question.id}}</a>
+                    {% endfor %}
                 </div>
-                {% endfor %}
                 <div class="row bg-white text-primary mt-3 p-1 justify-content-center">
-                    <button class="btn btn-success disable"><i class="fa fa-check-square-o" aria-hidden="true"></i>
-                        Submit</button>
+                    <button id="submitBtn" class="btn btn-success"><i class="fa fa-check-square-o" aria-hidden="true"></i>Submit</button>
                 </div>
 
             </div>
@@ -135,87 +138,15 @@
 
 
     </div>
-    <script>
-        var iframe = document.getElementById("iframeId");
-        $("input[type=checkbox]").is(":checked");
-        var ele = iframe.contentWindow.document.getElementByName("exampleRadios");
-
-        function load() {
-            var elmnt = document.getElementById("id1");
-            elmnt.className = "normal not_visited";
-        }
-        function markedreview() {
-            console.log(ele)
-            if (ele.checked) {
-                var elmnt = document.getElementById("id1");
-                elmnt.className = "normal not_visited";
-            }
-
-        }
-        function savenext() {
-            var iframe = document.getElementById("iframeId");
-            var elmnt = document.getElementById("id1");
-            elmnt.className = "normal answer_marked";
-        }
-
-    </script>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script>
-        questions = new Array();
-        {%if questions %}
-        {% for question in questions %}
-        questions.push({
-            question_text: "{{ question.question_text}}",
-            type: "{{question.question_type}}",
-            choices: "{{question.choices}}",
-            marks: "{{question.marks}}",
-            img: "{{question.ex_img}}"
-        });
-        {% endfor %}
-        {% endif %}
-        // Set the date we're counting down to
-        var countDownDate = new Date("Jan 5, 2021 15:37:25").getTime();
-
-        // Update the count down every 1 second
-        var x = setInterval(function () {
-
-            // Get today's date and time
-            var now = new Date().getTime();
-
-            // Find the distance between now and the count down date
-            var distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Output the result in an element with id="timer"
-            document.getElementById("timer").innerHTML = days + "d " + hours + "h "
-                + minutes + "m " + seconds + "s ";
-
-            // If the count down is over, write some text 
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("timer").innerHTML = "EXPIRED";
-            }
-        }, 1000);
-    </script>
-    <script>
-        const constraints = {
-            video: true
-        };
-
-        const video = document.querySelector('video');
-
-        navigator.mediaDevices.getUserMedia(constraints).then((stream) => { video.srcObject = stream });
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'js/ques.js' %}"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+         var maxx= {{questions.count}};
+    </script>
+    
+   
+    
+    
 </body>
 
 </html>
