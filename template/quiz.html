@@ -90,7 +90,7 @@
 
             </div>
             <div class="col-2 ml-0 pl-0 bg-white">
-                <video id="video" class="border rounded border-dark" width="300" height="200" autoplay></video>
+                <video id="video{{section.id}}" class="border rounded border-dark" width="300" height="200" autoplay></video>
                 <div class="row mr-0 ml-0 instruction_area w-100">
                     <div class="row w-100">
                         <div class="col p-0">
@@ -167,7 +167,13 @@
         const canvas = document.createElement('canvas'); // canvas for random ss
         let random_time = Math.floor(Math.random() * 120) + 10; //random ss time
 
-        rtvideo = document.getElementById('video'); // real time video
+        {% for section in sections %}
+                rtvideo{{section.id}} = document.getElementById('video'+"{{section.id}}"); // real time video
+
+                navigator.mediaDevices.getUserMedia({ video: true}).then((stream) => {
+                rtvideo{{section.id}}.srcObject = stream; });
+        {% endfor %}
+        rtvideo = document.getElementById('video1'); // real time video
 
         navigator.mediaDevices.getUserMedia({ video: true}).then((stream) => {
             rtvideo.srcObject = stream;
@@ -208,21 +214,7 @@
         window.onblur = function () {
             console.log("exited Full screen");
         };
-        ///////////////////////
-        // opening full screen
-        function openFullscreen() {
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.mozRequestFullScreen) { /* Firefox */
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { /* IE/Edge */
-                elem.msRequestFullscreen();
-            }
-            $("#overlay").addClass("d-none");
-            $("#close").show();
-        }
+        
         // to check if user exited full screen
         if (document.addEventListener) {
             document.addEventListener('fullscreenchange', exitHandler, false);
@@ -248,7 +240,7 @@
                     });
                     alert('you are not allowded to exit fullscreen');
                     $("#overlay").removeClass("d-none");
-                    $("#overlayframe1").html("<button id='fullscreenbutton' class='btn btn-success' onclick='openFullscreen();''>Allow Full Screen</button>");
+                    $("#overlayframe1").html("<button id='fullscreenbutton' class='btn btn-success' onclick='$openFullscreen();'>Allow Camera and Fullscreen Mode</button>");
                     $("#close").hide();
                 
                 }
@@ -272,15 +264,6 @@
 
 
         $(document).ready(function() {
-        //Video 
-        const constraints = {
-            video: true
-        };
-        
-        const video = document.querySelector('video');
-        
-        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {video.srcObject = stream});
-
         
         
         //Timer function
@@ -301,10 +284,35 @@
 
         
 
-        //Full Screen
+        //Full Screen & camera
+
+        var camera;
+        navigator.permissions.query({name: "camera"}).then(({state}) => { camera = state });
+
+        $openFullscreen = function(){
+            console.log(camera);
+            navigator.permissions.query({name: "camera"}).then(({state}) => { camera = state });
+            if(camera=="granted"){
+                $("#overlay").addClass("d-none");
+                $("#close").show();
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.mozRequestFullScreen) { /* Firefox */
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                    elem.webkitRequestFullscreen();
+                 }else if (elem.msRequestFullscreen) { /* IE/Edge */
+                    elem.msRequestFullscreen(); }
+            }
+            else{
+                
+                alert("Allow Camera than Click !")
+            }
+        }
+        
         $body = function(){
             $("#overlay").removeClass("d-none");
-            $("#overlayframe1").html("<button id='fullscreenbutton' class='btn btn-success' onclick='openFullscreen();''>Allow Full Screen</button>");
+            $("#overlayframe1").html("<button id='fullscreenbutton' class='btn btn-success' onclick='$openFullscreen();'>Allow Camera and   Full Screen</button>");
             $("#close").hide();
         };
 
@@ -325,7 +333,7 @@
         //questionstab 
         $("#questiontab").click(function(){
             $("#overlay").removeClass("d-none");
-            $("#overlayframe1").html("<iframe id='iframeoverlay' src='{% url 'exam:iframe1' uid %}?section={{section.id}}' style='height:800px;width:1200px;border-bottom:2px #CCC solid;'></iframe>");
+            $("#overlayframe1").html("<iframe id='iframeoverlay' src='{% url 'exam:iframe1' uid %}' style='height:800px;width:1200px;border-bottom:2px #CCC solid;'></iframe>");
         });
         //closetab for overlay items
         $("#close").click(function(){
@@ -351,7 +359,7 @@
             $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass("not_visited");
             $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("not_answered");
             $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).removeClass("d-none");
-        
+            
         }
         
         $reviewNext = function(){

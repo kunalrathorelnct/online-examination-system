@@ -7,54 +7,21 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+      <link rel="stylesheet" href="{% static 'css/aecInstructions.css' %}">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+      
       <title>Online Exam</title>
-      <script>
-        var ready=false;
-        function linkDisp(){
-            
-            if($("#defaultLanguage").val()!=0) { $('#readylink').prop('disabled', ready);}
-            if(ready==true){ready=false;}
-            else{ready=true;}
-        }
-        function startup(){
-            $('#PreviousInst').hide();
-            $('#secondPagep2').hide();
-            $('#readylink').hide();
-            $('#readylink').prop('disabled', true);
-            #('#secondPagep1').show();
-        }
-        
-        function showInstr(page){
-                if(page=="next"){
-                    $('#iframeId').contents().find("#firstPage").hide();
-                    $('#iframeId').contents().find("#secondPagep1").show();
-                    $("#secondPagep2").show();
-                    page="previous";
-                    $("#instPagination").hide();
-                    $('#PreviousInst').show();
-                    $('#secondPagep2').show();
-                    $('#readylink').show();
-                    
-                }else if(page=="previous"){
-                    $('#iframeId').contents().find("#secondPagep1").hide();
-                    $("#secondPagep2").hide();
-                    $('#iframeId').contents().find("#firstPage").show();
-                    page="next";
-                    $("#instPagination").show();
-                    $('#PreviousInst').hide();
-                    $('#secondPagep2').hide();
-                    $('#readylink').hide();
-                
-                }
-               
-            }
-         
-</script>
+      
    </head>
-   <body onload="startup()">
+   <body onload='$("#iframeId").contents().find("#secondPagep1").hide();'>
       <div class="container-fluid">
+         <div id="overlay" class="container-fluid d-none w-100 h-100">
+            <div id="overlayframe">
+                <div id='close'>X</div> 
+                <div id="overlayframe1"></div>
+            </div>
+         </div>
          <nav class="navbar navbar-light bg-primary">
             <span class="navbar-brand mb-0 h1 text-white font-weight-bold">{{ exam.subject_name }} RGPV Exam</span>
          </nav>
@@ -91,38 +58,110 @@
 					
 					<br>
 					
-					<input type="checkbox" id="disclaimer" onclick="linkDisp();" class="mt-1 float-left"> 
+					<input type="checkbox" id="disclaimer" onclick="$linkDisp();" class="mt-1 float-left"> 
 					<span class="w-98 ml-1 mark" id="agreementMessageCustom"><strong>Declaration by the Candidate:</strong> I have read and understood all the instructions. All the computer hardware allotted to me are in proper working condition. I declare that I am not carrying any prohibited gadgets like mobile phone, bluetooth devices, wrist watches, etc. and any prohibited material with me into the examination hall. I agree that if found to be non-complaint with the above declaration, I shall be liable to be debarred from this examination and / or to disciplinary action, which may include ban from future examinations / tests.</span>
 					</label>
 					
 			</div>
             <div class="row ">
                 <div class="col">
-                    <button id="PreviousInst" class="btn btn-outline-danger border float-left m-3" onclick="showInstr('previous')"><i class="fa fa-caret-left"></i><b class="h5 font-weight-bold"> Previous</b></button>
+                    <button id="PreviousInst" class="btn btn-outline-danger border float-left m-3" onclick="$showInstr('previous');"><i class="fa fa-caret-left"></i><b class="h5 font-weight-bold"> Previous</b></button>
                  </div>
                  <div class="col">
                     <a href="{% url 'exam:onlineexam' uid %}"><button id="readylink" class="btn btn-outline-success border m-3 ml-auto"><b class="h5 font-weight-bold">Start Test </b><i class="fa fa-caret-right"></i></button></a>
                  </div>
                 <div class="col">
-                   <button id="instPagination" class="btn btn-outline-danger border float-right m-3" onclick="showInstr('next')"><b class="h5 font-weight-bold">Next </b><i class="fa fa-caret-right"></i></button>
+                   <button id="instPagination" class="btn btn-outline-danger border float-right m-3" onclick="$showInstr('next')"><b class="h5 font-weight-bold">Next </b><i class="fa fa-caret-right"></i></button>
                 </div>
             </div>
          </div>
          
       </div>
-      <!-- Optional JavaScript -->
-      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
       <script>
+         $(function(){
+
+        
+            var camera;
+            navigator.permissions.query({name: "camera"}).then(({state}) => { camera = state });
+            $opencamera = function(){
+               
+               navigator.permissions.query({name: "camera"}).then(({state}) => { camera = state });
+               if(camera=="granted"){
+                  $("#overlay").addClass("d-none");
+                  $("#close").show();
+               }
+               else{
+                  alert("Allow Camera than Click !")
+               }
+            }
+            
+            $("#overlay").removeClass("d-none");
+            $("#overlayframe1").html("<button id='fullscreenbutton' class='btn btn-success' onclick='$opencamera();'>Allow Camera than Click</button>");
+            $("#close").hide();
+            
+            $('#PreviousInst').hide();
+            $('#secondPagep2').hide();
+            $('#readylink').hide();
+            $('#readylink').prop('disabled', true);
+            
+      
+         //camera stream
          const constraints = {
-           video: true
+            video: true
          };
-         
+        
          const video = document.querySelector('video');
+         navigator.mediaDevices.getUserMedia(constraints).then((stream) => {video.srcObject = stream});  
+
+         //overlayclose button
+         $("#close").click(function(){
+            
+            $("#overlay").addClass("d-none");
+        });
+
+
+       
          
-         navigator.mediaDevices.getUserMedia(constraints).then((stream) => {video.srcObject = stream});
+         var ready=false;
+         $linkDisp = function(){
+             
+             if($("#defaultLanguage").val()!=0) { $('#readylink').prop('disabled', ready);}
+             if(ready==true){ready=false;}
+             else{ready=true;}
+         }
+         
+
+         $showInstr = function(page){
+                 if(page=="next"){
+                     $('#iframeId').contents().find("#firstPage").hide();
+                     $('#iframeId').contents().find("#secondPagep1").show();
+                     $("#secondPagep2").show();
+                     page="previous";
+                     $("#instPagination").hide();
+                     $('#PreviousInst').show();
+                     $('#secondPagep2').show();
+                     $('#readylink').show();
+                     $('#iframeId').contents().find('#secondPagep1').css('padding-top','0px');
+                     
+                 }else if(page=="previous"){
+                     $('#iframeId').contents().find("#secondPagep1").hide();
+                     $("#secondPagep2").hide();
+                     $('#iframeId').contents().find("#firstPage").show();
+                     page="next";
+                     $("#instPagination").show();
+                     $('#PreviousInst').hide();
+                     $('#secondPagep2').hide();
+                     $('#readylink').hide();
+                 
+                 }
+                
+             }
+       
+            });
       </script>
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+      
+     
+      
    </body>
 </html>

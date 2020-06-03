@@ -55,13 +55,9 @@ def iframeview(request,uid):
 	return render(request,'iframesquestionpaper.html',{'questions':questions})
 
 def iframeview1(request,uid):
-	try:
-		section = request.GET.get('section')
-	except:
-		section = 1
 	uid = uid
 	exam = Student_Exam.objects.get(external_identifier=uid).exam
-	questions = Question.objects.filter(exam=exam,section=Section.objects.get(id=section))
+	questions = Question.objects.filter(exam=exam)
 	return render(request,'questionpaper.html',{'questions':questions})
 
 def infoView(request,uid):
