@@ -23,10 +23,13 @@
         .container-fluid {
             height: 685px;
         }
+        ::backdrop {
+            background-color: white;
+        }
     </style>
 </head>
 
-<body>
+<body oncontextmenu="return false;">
     <div id="overlay" class="container-fluid d-none w-100 h-100">
         <div id="overlayframe">
             <div id='close'>X</div> 
@@ -35,6 +38,7 @@
         
 
     </div>
+    <button id='fullscreenbutton' onclick="openFullscreen();">allow</button>
     <div id="main" class="container-fluid p-0">
         <div class="row bg-dark text-white font-weight-bold p-2">
             <div class="col text-warning"><i class="fa fa-book pr-2 mt-1" aria-hidden="true"></i> Subject : {{exam.subject_name}}</div>
@@ -133,13 +137,118 @@
             </div>
         </div>
         {% endfor %}
-        
-
 
     </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    
     <script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+        const canvas = document.createElement('canvas'); // canvas for random ss
+        let random_time = Math.floor(Math.random() * 120) + 10; //random ss time
+
+        rtvideo = document.getElementById('video'); // real time video
+
+        navigator.mediaDevices.getUserMedia({ video: true}).then((stream) => {
+            rtvideo.srcObject = stream;
+            setTimeout(user_ss, random_time*1000);
+        });//video stream start
+        
+        // for random user ss
+        function user_ss() {
+            canvas.width = rtvideo.videoWidth;
+            canvas.height = rtvideo.videoHeight;
+            canvas.getContext('2d').drawImage(rtvideo, 0, 0);
+            img.src = canvas.toDataURL('image/png');
+            data = new FormData();
+            data.append('file', canvas.toDataURL('image/png'));
+            $.ajax({
+              url: "/exam/uploadimage/{{uid}}/",
+              type: "POST",
+              data: data,
+              enctype: 'multipart/form-data',
+              processData: false,  // tell jQuery not to process the data
+              contentType: false   // tell jQuery not to set contentType
+            }).done(function(data) {
+                console.log("ss send");
+            });
+            random_time = Math.floor(Math.random() * 120) + 10;
+            console.log(random_time);
+            setTimeout(user_ss, random_time * 1000);
+        }
+
+        const elem = document.body;
+        let is_fullscreen = false;
+        let is_loaded = false;
+        // to check if user changed window or tab
+        window.onfocus = function () {
+            console.log("No Problem");
+            is_loaded =true;
+        };
+
+        window.onblur = function () {
+            console.log("exited Full screen");
+        };
+        ///////////////////////
+        // opening full screen
+        function openFullscreen() {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { /* Firefox */
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                elem.msRequestFullscreen();
+            }
+            document.getElementById('fullscreenbutton').style.display="none";
+        }
+        // to check if user exited full screen
+        if (document.addEventListener) {
+            document.addEventListener('fullscreenchange', exitHandler, false);
+            document.addEventListener('mozfullscreenchange', exitHandler, false);
+            document.addEventListener('MSFullscreenChange', exitHandler, false);
+            document.addEventListener('webkitfullscreenchange', exitHandler, false);
+        }
+
+        function exitHandler() {
+            if (document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement !== null) {
+                is_fullscreen = !is_fullscreen;
+                if (!is_fullscreen) {
+                    alert('you are not allowded to exit fullscreen');
+                    // code after exiting full screen
+                    document.getElementById('fullscreenbutton').style.display="block";
+                }
+            }
+        }
+        ///////////////////    
         var z=[],y=[],xx=[],w=[],v=[];
         
 
@@ -158,13 +267,13 @@
 
         $(document).ready(function() {
         //Video 
-        const constraints = {
-            video: true
-        };
+        // const constraints = {
+        //     video: true
+        // };
         
-        const video = document.querySelector('video');
+        // const video = document.querySelector('video');
         
-        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {video.srcObject = stream});
+        // navigator.mediaDevices.getUserMedia(constraints).then((stream) => {video.srcObject = stream});
 
         
         
@@ -329,7 +438,7 @@
         };
       
     });
-
+    is_loaded = true;
    
     </script>
       
