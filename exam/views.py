@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 import base64
 from django.core.files.base import ContentFile
-
+import datetime 
 
 def base64_file(data, name=None):
     _format, _img_str = data.split(';base64,')
@@ -29,8 +29,10 @@ def onlineexam(request,uid):
 		sections = Section.objects.filter(exam=exam)
 		student_object.start_time = timezone.localtime(timezone.now())
 		student_object.save()
-
-		return render(request,'quiz.html',{'uid':uid,'sections':sections,'questions':questions,'exam':exam,'range':range(1,len(questions)+1)})
+		the_time = datetime.datetime.strptime(str(student_object.start_time), '%Y-%m-%d %H:%M:%S.%f%z')
+		new_time = the_time + datetime.timedelta(minutes=int(str(student_object.exam.total_duration/1000/1000)[-3:]))
+		new_time = new_time.strftime('%b %d, %Y %H:%M:%S')
+		return render(request,'quiz.html',{'uid':uid,'sections':sections,'questions':questions,'exam':exam,'end_time':new_time})
 def examSummary(request,uid):
 	if request.method=='GET':
 		if uid:
