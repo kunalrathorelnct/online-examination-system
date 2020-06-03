@@ -208,7 +208,6 @@
         let is_loaded = false;
         // to check if user changed window or tab
         window.onfocus = function () {
-            console.log("No Problem");
             is_loaded =true;
         };
 
@@ -228,6 +227,17 @@
             if (document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement !== null) {
                 is_fullscreen = !is_fullscreen;
                 if (!is_fullscreen) {
+                    $.ajax({
+                    url: "/exam/warningupdate/{{uid}}/",
+                    type: "POST",
+                    data: {'cheating_type':'fullscreenexit'},
+                    }).done(function(data){
+                        console.log(data.status=="submit")
+                        if (data.status=="submit"){
+                            document.getElementById('submitBtn').click();
+                        }
+                        
+                    });
                     alert('you are not allowded to exit fullscreen');
                     $("#overlay").removeClass("d-none");
                     $("#overlayframe1").html("<button id='fullscreenbutton' class='btn btn-success' onclick='$openFullscreen();'>Allow Camera and Fullscreen Mode</button>");
@@ -358,10 +368,10 @@
             console.log("clicked");
             $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass();
             if($("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]").is(":checked")){
-                var favorite = [];
+                var favorite = "";
                 $.each($("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]:checked"), function(){
-                favorite.push($(this).val()); });
-                
+                favorite+=$(this).val(); });
+                console.log(favorite);
                 $.ajax({
                     url: "/exam/response/{{uid}}/",
                     type: "POST",
@@ -413,6 +423,17 @@
         $saveNext = function(){
             $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass();
             if($("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]").is(":checked")){
+                var favorite = "";
+                $.each($("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]:checked"), function(){
+                favorite+=$(this).val(); });
+                console.log(favorite);
+                $.ajax({
+                    url: "/exam/response/{{uid}}/",
+                    type: "POST",
+                    data: {'question':i[sectionid],'response':favorite},
+                    });
+
+
                 $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal answered");
             }
             else{
