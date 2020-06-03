@@ -15,7 +15,6 @@ class Student(models.Model):
 	def __str__(self):
 		return self.roll_no
 
-
 class Exam(models.Model):
 	subject_name = models.CharField(max_length=50)
 	start_time = models.DateTimeField(blank=False,null=False)
@@ -46,13 +45,21 @@ class Student_Exam(models.Model):
 	warning_count = models.IntegerField(default=0)
 	start_time = models.DateTimeField(null=True,blank=True)
 	end_time = models.DateTimeField(null=True,blank=True)
-	ss = models.FileField(null=True,blank=True,upload_to = file_path_ss)
 
 	class Meta:
 		unique_together = ['student','exam']
 
 	def __str__(self):
 		return self.exam.subject_name+'_'+str(self.student.roll_no)
+
+class ProcteredSS(models.Model):
+	def file_path_img(self,filename):
+		return "students/{0}/{1}/{2}".format(self.student_exam.exam.subject_name,self.student_exam.student.roll_no,str(datetime.datetime.now())+'.png')
+	student_exam = models.ForeignKey(Student_Exam,on_delete=models.CASCADE)
+	img = models.ImageField(upload_to = file_path_img)
+	
+	def __str__(self):
+		return self.student_exam.student.roll_no+self.student_exam.exam.subject_name
 
 class Question(models.Model):
 	def file_path(self,filename):

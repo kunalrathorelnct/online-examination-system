@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse
-from .models import Student_Exam,Question,Section
+from .models import *
 # Create your views here.
 from django.utils import timezone
 from .serializers import *
@@ -17,7 +17,9 @@ def onlineexam(request,uid):
 			return HttpResponse("Invalid Request")
 		student_object.start_time = timezone.now()
 		sections = Section.objects.filter(exam=exam)
-		
+		student_object.start_time = timezone.localtime(timezone.now())
+		student_object.save()
+
 		return render(request,'quiz.html',{'uid':uid,'sections':sections,'questions':questions,'exam':exam,'range':range(1,len(questions)+1)})
 def examSummary(request,uid):
 	if request.method=='GET':
@@ -43,16 +45,17 @@ def iframeview(request,uid):
 def infoView(request,uid):
 	if request.method=='GET':
 		student_object = Student_Exam.objects.get(external_identifier = uid)
-		exam = student_object.exam
-		duration = str(exam.total_duration/1000/1000)[-3:]	
-		sections = Section.objects.filter(exam=exam)
-		return render(request,'iframesInstruction.html',{'student_object':student_object,'exam':exam,'sections':sections,'duration':duration})
+		if student_object.exam.start_time<=timezone.localtime(timezone.now()):
+			exam = student_object.exam
+			duration = str(exam.total_duration/1000/1000)[-3:]	
+			sections = Section.objects.filter(exam=exam)
+			return render(request,'iframesInstruction.html',{'student_object':student_object,'exam':exam,'sections':sections,'duration':duration})
 
 
 def examView(request,uid):
 	if request.method=='GET':
 		student_object = Student_Exam.objects.get(external_identifier = uid)
-		if student_object.exam.start_time<=timezone.now():
+		if student_object.exam.start_time<=timezone.localtime(timezone.now()):
 			student =student_object.student
 			subject_name = student_object.exam.subject_name
 			return render(request,'index.html',{'student':student,'subject_name':subject_name,'uid':uid})
@@ -88,6 +91,6 @@ class PhotoUploadView(APIView):
 	def post(self, request,uid, *args, **kwargs):
 		ss = request.data['file']
 		student_object = Student_Exam.objects.get(external_identifier = uid)
-		student_object.ss = ss
-		student_object.save()
+		img_upload = ProcteredSS(student_exam=student_object,img=ss)
+		img_upload.save()
 		return Response({'status':'ok'})
