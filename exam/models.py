@@ -87,8 +87,8 @@ class Question(models.Model):
 class Student_Response(models.Model):
 	student_exam = models.ForeignKey(Student_Exam,on_delete = models.CASCADE)
 	question = models.ForeignKey(Question,on_delete = models.CASCADE)
-	time_stamp = models.DateTimeField()
-	response = models.TextField()
+	time_stamp = models.DateTimeField(null=True,blank=True)
+	response = models.TextField(null=True,blank=True)
 
 	class Meta:
 		unique_together = ['student_exam','question']

@@ -44,7 +44,7 @@ def examSummary(request,uid):
 
 def iframeview(request,uid):
 	try:
-		section = request.query_params['section']
+		section = request.GET.get('section')
 	except:
 		section = 1
 	uid = uid
@@ -54,7 +54,7 @@ def iframeview(request,uid):
 
 def iframeview1(request,uid):
 	try:
-		section = request.query_params['section']
+		section = request.GET.get('section')
 	except:
 		section = 1
 	uid = uid
@@ -110,8 +110,16 @@ class StudentResponse(APIView):
 class PhotoUploadView(APIView):
 	def post(self, request,uid, *args, **kwargs):
 		ss = request.data['file']
-		print(request.data)
 		student_object = Student_Exam.objects.get(external_identifier = uid)
 		img_upload = ProcteredSS(student_exam=student_object,img=base64_file(ss))
 		img_upload.save()
+		return Response({'status':'ok'})
+
+class WarningCountUpdate(APIView):
+	def post(self,request,uid):
+		student_object = Student_Exam.objects.get(external_identifier = uid)
+		student_object.warning_count+=1
+		if student_object.warning_count>=3:
+			return Response({'status':'submit'})
+		student_object.save()
 		return Response({'status':'ok'})
