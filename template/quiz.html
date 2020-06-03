@@ -1,4 +1,5 @@
 {% load static %}
+{% load rangeFun %}
 <!doctype html>
 <html lang="en">
 
@@ -35,17 +36,18 @@
 
     </div>
     <div id="main" class="container-fluid p-0">
-        <div class="row bg-dark text-white font-weight-bold p-3">
+        <div class="row bg-dark text-white font-weight-bold p-2">
             <div class="col text-warning"><i class="fa fa-book pr-2 mt-1" aria-hidden="true"></i> Subject : {{exam.subject_name}}</div>
             <div id="instructions" class="col d-flex justify-content-center"><i class="fa fa-pencil-square-o pr-2 mt-1" aria-hidden="true"></i> Instructions</div>
             <div id="questiontab" class="col d-flex justify-content-center"><i class="fa fa-question-circle pr-2 mt-1" aria-hidden="true"></i> Questions</div>
+            <a id="submitBtn" onclick="$submitBtn()" class="btn btn-success p-1 mr-4"><i class="fa fa-check-square-o" aria-hidden="true"></i>Submit</a>
         </div>
-        <div class="row h-100">
+        {% for section in sections %}
+        <div id="section{{section.id}}" class="row h-100 d-none">
             <div class="col-10">
                 <div class="row border p-1 bg-white font-weight-bold text-white">
                     <div class="col">
-                        <a class="btn border btn-white text-primary active"><i class="fa fa-bookmark-o"
-                                aria-hidden="true"></i> {{exam.subject_name}}</a>
+                        <button class="btn border btn-white text-primary focus"><i class="fa fa-bookmark-o" aria-hidden="true"></i> {{exam.subject_name}}</button>
                     </div>
                     <div class="col">
                         <a id="calculator" class="btn border float-right"><i class="fa fa-calculator text-warning" aria-hidden="true"></i></a>
@@ -53,40 +55,39 @@
                 </div>
                 <div class="row border p-1 bg-white font-weight-bold text-white">
                     <div class="col">
-                        {% for sectionname in sectionnames %}
-                        <a class="btn border btn-white text-primary active"><i class="fa fa-pencil-square-o"
-                                aria-hidden="true"></i> {{sectionname.section_name}} </a>
+                        {% for secid in sections %}
+                        <button id="sectionBtn{{section.id}}{{secid.id}}" onclick="$sectionClick($(this));"  class="btn border btn-white text-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{secid.section_name}}</a>
                         {% endfor %}
-    
+                        
                     </div>
                     <div class="col">
                         <a class=" float-right"><i class="fa fa-clock-o text-warning" aria-hidden="true"></i>
                             <p id="timer" class="d-inline text-warning"></p>
                         </a>
-                    </div>
+                    </div>  
                 </div>
                 <div class="row ml-1 mark bg-white">
                     <div class="col text-danger">
-                        <small><b>Question Type : <span id="quesType">MCQ</span></b></small>
+                        <small><b>Question Type : </b></small>
                     </div>
                     <div class="col">
-                        <small class="float-right">Marks for Correct Answer <span id="quesMarks"></span> | Marks for Wrong Answer <span id="NegetivequesMarks">-1</span> </small>
+                        <small class="float-right">Marks for Correct Answer | Marks for Wrong Answer </small>
                     </div>
                 </div>
                 <div class="row h-100">
                     <div class="col">
-                        <iframe id="iframeid" class="w-100 h-100" src="{% url 'exam:iframe' uid %}"></iframe>
+                        <iframe id="iframeid" class="w-100 h-100" src="{% url 'exam:iframe' uid %}?section={{section.id}}"></iframe>
                     </div>
                 </div>
                 <div class="row ">
                     <div class="col">
-                        <button id="reviewNext"class="btn btn-white border float-left m-3">Mark for Review & Next</button>
+                        <button id="reviewNext" onclick='$reviewNext()' class="btn btn-white border float-left m-3">Mark for Review & Next</button>
                     </div>
                     <div class="col">
-                        <button id="clearResponse" class="btn btn-white border m-3 ml-auto">Clear Response</button>
+                        <button id="clearResponse" onclick='$clearResponse()' class="btn btn-white border m-3 ml-auto">Clear Response</button>
                     </div>
                     <div class="col">
-                        <button id="saveNext" class="btn border float-right m-3">Save & Next</button>
+                        <button id="saveNext" onclick='$saveNext()' class="btn border float-right m-3">Save & Next</button>
                     </div>
                 </div>
 
@@ -119,30 +120,219 @@
                 </div>
 
                 <div class="row bg-white text-primary border mt-3 p-1 justify-content-center">
-                    <h6><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Aptitude</h6>
+                    <h6><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{section.section_name}}</h6>
                 </div>
                 
-                <div class="row m-3">
-                    
-                    {% for question in questions %}
-                    <a class="normal not_visited" onclick="$panelClick($(this));" id="panel{{question.id}}">{{question.id}}</a>
+                <div class="row m-3">   
+                    {% for id in section.no_of_questions|rangeFun %}
+                     <a class='normal not_visited' onclick='$panelClick($(this));' id='panel{{id}}'>{{id}}</a>
                     {% endfor %}
                 </div>
-                <div class="row bg-white text-primary mt-3 p-1 justify-content-center">
-                    <button id="submitBtn" class="btn btn-success"><i class="fa fa-check-square-o" aria-hidden="true"></i>Submit</button>
-                </div>
+                
 
             </div>
         </div>
-
+        {% endfor %}
+        
 
 
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="{% static 'js/ques.js' %}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   
     <script>
-         var maxx= {{questions.count}};
+        var z=[],y=[],xx=[],w=[],v=[];
+        
+
+        var i=[];
+        {% for section in sections %}
+            var maxx{{section.id}}= {{section.no_of_questions}};
+            i[{{section.id}}]=1;
+            z[{{section.id}}]=0;
+            y[{{section.id}}]=0;
+            xx[{{section.id}}]=0;
+            w[{{section.id}}]=0;
+            v[{{section.id}}]=0;
+        {% endfor %}
+        var iid= "{{uid}}"
+
+
+        $(document).ready(function() {
+        //Video 
+        const constraints = {
+            video: true
+        };
+        
+        const video = document.querySelector('video');
+        
+        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {video.srcObject = stream});
+
+        
+        
+        //Timer function
+        var countDownDate = new Date("Jun 2, 2020 15:37:25").getTime();
+        var x = setInterval(function() {
+        var now = new Date().getTime();
+        var distance = countDownDate - now;
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        $("#timer").html(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+        if (distance < 0) {
+            clearInterval(x);
+            $("#timer").html("EXPIRED");
+        }
+        }, 1000);
+
+        //Calculator
+
+        $("#calculator").click(function(){
+            $("#overlay").removeClass("d-none");
+            $("#overlayframe1").html("<iframe src=https://widgetscode.com/wc/sciv/all?skin=nb1 style='width:560px;height:670px;margin:0;'frameborder=0></iframe>");
+            
+        });
+
+        //Instruction Tab
+        $("#instructions").click(function(){
+            $("#overlay").removeClass("d-none");
+            $("#overlayframe1").html("<iframe id='iframeoverlay' src='{% url 'exam:iframe' uid %}' style='height:100%;width:100%;border:none;border-bottom:1px #CCC solid;'></iframe>");
+        });
+
+        //questionstab 
+        $("#questiontab").click(function(){
+            $("#overlay").removeClass("d-none");
+            $("#overlayframe1").html("<iframe id='iframeoverlay' src='{% url 'exam:iframe' uid %}' style='height:100%;width:100%;border:none;border-bottom:1px #CCC solid;'></iframe>");
+        });
+        //closetab for overlay items
+        $("#close").click(function(){
+            $("#overlay").addClass("d-none");
+        });
+
+        //pannel design logic
+        
+        var sectionid=1;
+        $("#section"+sectionid).removeClass("d-none");
+        $("#sectionBtn"+sectionid+sectionid).addClass("focus");
+        $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass("not_visited");
+        $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("not_answered");
+        $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).removeClass("d-none");
+    
+        $sectionClick =function($this){
+            $("#section"+sectionid).addClass("d-none");
+            $("#sectionBtn"+sectionid+sectionid).removeClass("focus");
+            sectionid=parseInt($this.attr('id').replace('sectionBtn'+sectionid, ''));
+            // console.log(sectionid);
+            $("#section"+sectionid).removeClass("d-none");
+            $("#sectionBtn"+sectionid+sectionid).addClass("focus");
+            $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass("not_visited");
+            $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("not_answered");
+            $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).removeClass("d-none");
+        
+        }
+        
+        $reviewNext = function(){
+            console.log("clicked");
+            $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass();
+            if($("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]").is(":checked")){
+                
+                $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal answer_marked");
+            }else{
+                $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal marked");
+            }
+            $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).addClass("d-none");
+            
+            i[sectionid]+=1;
+        
+            if(i[sectionid]==eval("maxx"+sectionid)){
+                $("#section"+sectionid).find("#reviewNext").addClass("disabled");
+                $("#section"+sectionid).find("#saveNext").html("Save");
+            }
+            $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).removeClass("d-none");
+            if($("#section"+sectionid).find("#panel"+i[sectionid]).hasClass("not_visited")){
+                $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass("not_visited");
+                $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("not_answered");
+            }
+            
+        };
+        $clearResponse = function(){
+            $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass();
+            $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal not_answered");
+            $("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]").prop("checked", false);
+        };
+        $panelClick =function($this) {
+            $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).addClass("d-none");
+            i[sectionid] = parseInt($this.attr('id').replace('panel', ''));
+            $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).removeClass("d-none");
+            if($("#section"+sectionid).find("#panel"+i[sectionid]).hasClass("not_visited")){
+                $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass("not_visited");
+                $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("not_answered");
+            }
+            if(i[sectionid]==eval("maxx"+sectionid)){
+                $("#section"+sectionid).find("#reviewNext").addClass("disabled");
+                $("#section"+sectionid).find("#saveNext").html("Save");
+            }else{
+                $("#section"+sectionid).find("#saveNext").html("Save & Next");
+                $("#section"+sectionid).find("#reviewNext").removeClass("disabled");
+                $("#section"+sectionid).find("#saveNext").removeClass("disabled");
+            }
+
+        };
+        
+        $saveNext = function(){
+            $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass();
+            if($("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]").is(":checked")){
+                $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal answered");
+            }
+            else{
+                $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal not_answered");
+            }
+            
+            if(i[sectionid]!=eval("maxx"+sectionid)){
+                $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).addClass("d-none");
+                i[sectionid]+=1;
+                if(i[sectionid]==eval("maxx"+sectionid)){
+                    $("#section"+sectionid).find("#reviewNext").addClass("disabled");
+                    $("#section"+sectionid).find("#saveNext").html("Save");
+            
+                }
+                $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).removeClass("d-none");
+                if($("#section"+sectionid).find("#panel"+i[sectionid]).hasClass("not_visited")){
+                    $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass("not_visited");
+                    $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("not_answered");
+                }
+            }
+
+        };
+        $submitBtn = function(){
+            {% for section in sections %}
+            {% for id in section.no_of_questions|rangeFun %}
+                if($("#section"+sectionid).find("#panel"+{{id}}).hasClass("not_visited")){
+                    z[{{section.id}}]+=1;
+                }else
+                if($("#section"+sectionid).find("#panel"+{{id}}).hasClass("answered")){
+                    y[{{section.id}}]+=1;
+                }else
+                if($("#section"+sectionid).find("#panel"+{{id}}).hasClass("answer_marked")){
+                    xx[{{section.id}}]+=1;
+                }else
+                if($("#section"+sectionid).find("#panel"+{{id}}).hasClass("marked")){
+                    w[{{section.id}}]+=1;
+                }else
+                if($("#section"+sectionid).find("#panel"+{{id}}).hasClass("not_answered")){
+                    v[{{section.id}}]+=1;
+                }
+            {% endfor %}
+        {% endfor %}
+        
+        $("#submitBtn").attr('href',"{% url 'exam:examsummary' uid %}?z="+z.join('')+"&y="+y.join('')+"&x="+xx.join('')+"&w="+w.join('')+"&v="+v.join(''));
+
+        };
+      
+    });
+
+   
     </script>
+      
     
    
     

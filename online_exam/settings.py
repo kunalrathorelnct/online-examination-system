@@ -72,6 +72,7 @@ TEMPLATES = [
             ],
             'libraries':{
             'split': 'template.split',
+            'rangeFun': 'template.rangeFun',
 
             }
         },

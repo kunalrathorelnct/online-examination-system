@@ -10,6 +10,7 @@ urlpatterns = [
 		path('instruction/<uuid:uid>/', views.infoView,name='instructions'),
 		path('iframeview/<uuid:uid>',views.iframeview,name='iframe'),
 		path('onlineexam/<uuid:uid>', views.onlineexam, name='onlineexam'),
+		path('examsummary/<uuid:uid>', views.examSummary, name='examsummary'),
 		path('uploadimage/<uuid:uid>/',views.PhotoUploadView.as_view()),
     	path('info/<uuid:uid>/',views.examView),
     	path('getquestion/<uuid:uid>/',views.StudentQuizView.as_view()),

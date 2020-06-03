@@ -16,9 +16,20 @@ def onlineexam(request,uid):
 		else:
 			return HttpResponse("Invalid Request")
 		student_object.start_time = timezone.now()
-		sections = student_object.exam.no_of_sections
+		sections = Section.objects.filter(exam=exam)
+		
 		return render(request,'quiz.html',{'uid':uid,'sections':sections,'questions':questions,'exam':exam,'range':range(1,len(questions)+1)})
-	
+def examSummary(request,uid):
+	if request.method=='GET':
+		if uid:
+			student_object = Student_Exam.objects.get(external_identifier = uid)
+			exam = student_object.exam
+		else:
+			return HttpResponse("Invalid Request")
+		student_object.start_time = timezone.now()
+		sections = Section.objects.filter(exam=exam)
+		return render(request,'examsummary.html',{'sections':sections})
+
 def iframeview(request,uid):
 	try:
 		section = request.query_params['section']
@@ -26,7 +37,7 @@ def iframeview(request,uid):
 		section = 1
 	uid = uid
 	exam = Student_Exam.objects.get(external_identifier=uid).exam
-	questions = Question.objects.filter(exam=exam,section =section)
+	questions = Question.objects.filter(exam=exam,section=Section.objects.get(id=section))
 	return render(request,'iframesquestionpaper.html',{'questions':questions})
 
 def infoView(request,uid):
