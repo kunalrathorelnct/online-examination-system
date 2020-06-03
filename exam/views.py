@@ -6,6 +6,16 @@ from .serializers import *
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+import base64
+from django.core.files.base import ContentFile
+
+
+def base64_file(data, name=None):
+    _format, _img_str = data.split(';base64,')
+    _name, ext = _format.split('/')
+    if not name:
+        name = _name.split(":")[-1]
+    return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext))
 
 def onlineexam(request,uid):
 	if request.method=='GET':
@@ -42,6 +52,16 @@ def iframeview(request,uid):
 	questions = Question.objects.filter(exam=exam,section=Section.objects.get(id=section))
 	return render(request,'iframesquestionpaper.html',{'questions':questions})
 
+def iframeview1(request,uid):
+	try:
+		section = request.query_params['section']
+	except:
+		section = 1
+	uid = uid
+	exam = Student_Exam.objects.get(external_identifier=uid).exam
+	questions = Question.objects.filter(exam=exam,section=Section.objects.get(id=section))
+	return render(request,'questionpaper.html',{'questions':questions})
+
 def infoView(request,uid):
 	if request.method=='GET':
 		student_object = Student_Exam.objects.get(external_identifier = uid)
@@ -77,10 +97,10 @@ class StudentResponse(APIView):
 	def post(self,request,uid):
 		question = int(request.data.get('question'))
 		question = Question.objects.get(pk=question)
-		student_exam = Student_Exam.objects.get(external_identifier=uid).exam
+		student_exam = Student_Exam.objects.get(external_identifier=uid)
 		student_response,created = Student_Response.objects.get_or_create(
 				question = question,
-				student_exam = student_exam.id
+				student_exam = student_exam
 			)
 		student_response.response = request.data.get('response')
 		student_response.time_stamp = timezone.now()
@@ -90,7 +110,8 @@ class StudentResponse(APIView):
 class PhotoUploadView(APIView):
 	def post(self, request,uid, *args, **kwargs):
 		ss = request.data['file']
+		print(request.data)
 		student_object = Student_Exam.objects.get(external_identifier = uid)
-		img_upload = ProcteredSS(student_exam=student_object,img=ss)
+		img_upload = ProcteredSS(student_exam=student_object,img=base64_file(ss))
 		img_upload.save()
 		return Response({'status':'ok'})

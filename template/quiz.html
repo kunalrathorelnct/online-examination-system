@@ -23,10 +23,13 @@
         .container-fluid {
             height: 685px;
         }
+        ::backdrop {
+            background-color: white;
+        }
     </style>
 </head>
 
-<body>
+<body onload="$body()" oncontextmenu="return false;">
     <div id="overlay" class="container-fluid d-none w-100 h-100">
         <div id="overlayframe">
             <div id='close'>X</div> 
@@ -66,20 +69,13 @@
                         </a>
                     </div>  
                 </div>
-                <div class="row ml-1 mark bg-white">
-                    <div class="col text-danger">
-                        <small><b>Question Type : </b></small>
-                    </div>
-                    <div class="col">
-                        <small class="float-right">Marks for Correct Answer | Marks for Wrong Answer </small>
-                    </div>
-                </div>
+                
                 <div class="row h-100">
                     <div class="col">
                         <iframe id="iframeid" class="w-100 h-100" src="{% url 'exam:iframe' uid %}?section={{section.id}}"></iframe>
                     </div>
                 </div>
-                <div class="row ">
+                <div class="row mt-3">
                     <div class="col">
                         <button id="reviewNext" onclick='$reviewNext()' class="btn btn-white border float-left m-3">Mark for Review & Next</button>
                     </div>
@@ -133,13 +129,122 @@
             </div>
         </div>
         {% endfor %}
-        
-
 
     </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    
     <script>
+    
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+        const canvas = document.createElement('canvas'); // canvas for random ss
+        let random_time = Math.floor(Math.random() * 120) + 10; //random ss time
+
+        rtvideo = document.getElementById('video'); // real time video
+
+        navigator.mediaDevices.getUserMedia({ video: true}).then((stream) => {
+            rtvideo.srcObject = stream;
+            setTimeout(user_ss, random_time*1000);
+        });//video stream start
+        
+        // for random user ss
+        function user_ss() {
+            canvas.width = rtvideo.videoWidth;
+            canvas.height = rtvideo.videoHeight;
+            canvas.getContext('2d').drawImage(rtvideo, 0, 0);
+            // img.src = canvas.toDataURL('image/png');
+            data = new FormData();
+            data.append('file', canvas.toDataURL('image/png'));
+            $.ajax({
+              url: "/exam/uploadimage/{{uid}}/",
+              type: "POST",
+              data: data,
+              enctype: 'multipart/form-data',
+              processData: false,  // tell jQuery not to process the data
+              contentType: false   // tell jQuery not to set contentType
+            }).done(function(data) {
+                console.log("ss send");
+            });
+            random_time = Math.floor(Math.random() * 120) + 10;
+            console.log(random_time);
+            setTimeout(user_ss, random_time * 1000);
+        }
+
+        const elem = document.body;
+        let is_fullscreen = false;
+        let is_loaded = false;
+        // to check if user changed window or tab
+        window.onfocus = function () {
+            console.log("No Problem");
+            is_loaded =true;
+        };
+
+        window.onblur = function () {
+            console.log("exited Full screen");
+        };
+        ///////////////////////
+        // opening full screen
+        function openFullscreen() {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { /* Firefox */
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                elem.msRequestFullscreen();
+            }
+            $("#overlay").addClass("d-none");
+            $("#close").show();
+        }
+        // to check if user exited full screen
+        if (document.addEventListener) {
+            document.addEventListener('fullscreenchange', exitHandler, false);
+            document.addEventListener('mozfullscreenchange', exitHandler, false);
+            document.addEventListener('MSFullscreenChange', exitHandler, false);
+            document.addEventListener('webkitfullscreenchange', exitHandler, false);
+        }
+
+        function exitHandler() {
+            if (document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement !== null) {
+                is_fullscreen = !is_fullscreen;
+                if (!is_fullscreen) {
+                    alert('you are not allowded to exit fullscreen');
+                    $("#overlay").removeClass("d-none");
+                    $("#overlayframe1").html("<button id='fullscreenbutton' class='btn btn-success' onclick='openFullscreen();''>Allow Full Screen</button>");
+                    $("#close").hide();
+                
+                }
+            }
+        }
+        ///////////////////    
         var z=[],y=[],xx=[],w=[],v=[];
         
 
@@ -184,6 +289,15 @@
         }
         }, 1000);
 
+        
+
+        //Full Screen
+        $body = function(){
+            $("#overlay").removeClass("d-none");
+            $("#overlayframe1").html("<button id='fullscreenbutton' class='btn btn-success' onclick='openFullscreen();''>Allow Full Screen</button>");
+            $("#close").hide();
+        };
+
         //Calculator
 
         $("#calculator").click(function(){
@@ -195,13 +309,13 @@
         //Instruction Tab
         $("#instructions").click(function(){
             $("#overlay").removeClass("d-none");
-            $("#overlayframe1").html("<iframe id='iframeoverlay' src='{% url 'exam:iframe' uid %}' style='height:100%;width:100%;border:none;border-bottom:1px #CCC solid;'></iframe>");
+            $("#overlayframe1").html("<iframe id='iframeoverlay' src='{% url 'exam:instructions' uid %}' style='height:800px;width:1200px;border-bottom:2px #CCC solid;'></iframe>");
         });
 
         //questionstab 
         $("#questiontab").click(function(){
             $("#overlay").removeClass("d-none");
-            $("#overlayframe1").html("<iframe id='iframeoverlay' src='{% url 'exam:iframe' uid %}' style='height:100%;width:100%;border:none;border-bottom:1px #CCC solid;'></iframe>");
+            $("#overlayframe1").html("<iframe id='iframeoverlay' src='{% url 'exam:iframe1' uid %}?section={{section.id}}' style='height:800px;width:1200px;border-bottom:2px #CCC solid;'></iframe>");
         });
         //closetab for overlay items
         $("#close").click(function(){
@@ -234,7 +348,15 @@
             console.log("clicked");
             $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass();
             if($("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]").is(":checked")){
+                var favorite = [];
+                $.each($("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]:checked"), function(){
+                favorite.push($(this).val()); });
                 
+                $.ajax({
+                    url: "/exam/response/{{uid}}/",
+                    type: "POST",
+                    data: {'question':i[sectionid],'response':favorite},
+                    });
                 $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal answer_marked");
             }else{
                 $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal marked");
@@ -330,7 +452,7 @@
         };
       
     });
-
+    is_loaded = true;
    
     </script>
       

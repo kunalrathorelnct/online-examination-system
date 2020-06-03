@@ -137,6 +137,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = MEDIA_DIR
 #STATIC_ROOT = STATIC_DIR
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 STATICFILES_DIRS = [STATIC_DIR,]
 
 #Email Setting

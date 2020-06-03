@@ -13,33 +13,24 @@
 <body oncontextmenu="return false;" oncopy="return false" oncut="return false" onpaste="return false">
   <div class="container-fluid">
   {% for question in questions %}
-  <div id="id{{question.id}}" class="container-fluid d-none">
+  <div id="id{{question.id}}" class="container-fluid">
     
     <div class="row border pl-3 pt-1 m-4">
       <div class="col-6"><h6 class="font-weight-bold">Marks fo Correct :{{question.marks}} | Marks for Incorrect : {{question.negative_marks}}</h6></div>
       <div class="col-6"><h6 class="font-weight-bold float-right">Question Type : {{question.question_type}}</h6></div>
     </div>
     <div class="row border pl-3 pt-1 m-4">
-      <h6 class="font-weight-bold" id="ques">Question No : {{question.id}}</h6>
-    </div>
-    <div class="row border pl-3 pt-1 m-4">
       
-      <h6 class="mark h5 font-weight-bold" id="question_text">{{question.question_text}}</h6>
-    </div>
-      <div class="row justify-content-center">
-        <img id="quesImg" style="height: 50vh; width: 50vw; " src="/media/{{question.ex_img}}" alt="">
+        <h6 class="mark h4 font-awesome font-weight-bold" id="question_text">{{question.question_text}}</h6>
       </div>
-      <div id="opt" class="row p-4">
-      
-
+        <div class="row justify-content-center">
+          <img id="quesImg" style="height: 50vh; width: 50vw;" src="/media/{{question.ex_img}}" alt="{{question.id}}">
+      </div>
+    <div id="opt" class="row font-weight-bold p-4 h5">
         {% for option in question.choices|split  %}
-        <div class="form-check font-weight-bold p-4 h5">
-          <input class="form-check-input" type="radio" name="exampleRadios{{question.id}}" value="{{option}}">
-          <label class="form-check-label" for="exampleRadios{{question.id}}">{{option}}</label>
-        </div>
+            <h6 class="p-2">{{option}}</h6>
         {% endfor %}
-     
-      </div>
+    </div>
       
     
 
