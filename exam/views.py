@@ -44,7 +44,7 @@ def examSummary(request,uid):
 
 def iframeview(request,uid):
 	try:
-		section = request.query_params['section']
+		section = request.GET.get['section']
 	except:
 		section = 1
 	uid = uid
@@ -54,7 +54,7 @@ def iframeview(request,uid):
 
 def iframeview1(request,uid):
 	try:
-		section = request.query_params['section']
+		section = request.GET.get['section']
 	except:
 		section = 1
 	uid = uid
