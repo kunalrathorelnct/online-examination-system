@@ -73,6 +73,7 @@
                 <div class="row h-100">
                     <div class="col">
                         <iframe id="iframeid" class="w-100 h-100" src="{% url 'exam:iframe' uid %}?section={{section.id}}"></iframe>
+                        
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -167,12 +168,8 @@
         const canvas = document.createElement('canvas'); // canvas for random ss
         let random_time = Math.floor(Math.random() * 120) + 10; //random ss time
 
-        {% for section in sections %}
-                rtvideo = document.getElementById('video'+{{section.id}}); // real time video
-
-                navigator.mediaDevices.getUserMedia({ video: true}).then((stream) => {
-                rtvideo.srcObject = stream; });
-        {% endfor %}
+    
+                
         rtvideo = document.getElementById('video1'); // real time video
 
         navigator.mediaDevices.getUserMedia({ video: true}).then((stream) => {
@@ -246,7 +243,7 @@
                 }
             }
         }
-        ///////////////////    
+       
         var z=[],y=[],xx=[],w=[],v=[];
         
 
@@ -290,13 +287,14 @@
 
         var camera;
         navigator.permissions.query({name: "camera"}).then(({state}) => { camera = state });
-
+        $("#close").hide();
         $openFullscreen = function(){
             console.log(camera);
             navigator.permissions.query({name: "camera"}).then(({state}) => { camera = state });
             if(camera=="granted"){
+                
                 $("#overlay").addClass("d-none");
-                $("#close").show();
+               
                 if (elem.requestFullscreen) {
                     elem.requestFullscreen();
                 } else if (elem.mozRequestFullScreen) { /* Firefox */
@@ -315,12 +313,13 @@
         $body = function(){
             $("#overlay").removeClass("d-none");
             $("#overlayframe1").html("<button id='fullscreenbutton' class='btn btn-success' onclick='$openFullscreen();'>Allow Camera and   Full Screen</button>");
-            $("#close").hide();
+            
         };
-
+        
         //Calculator
 
         $("#calculator").click(function(){
+            $("#close").show();
             $("#overlay").removeClass("d-none");
             $("#overlayframe1").html("<iframe src=https://widgetscode.com/wc/sciv/all?skin=nb1 style='width:560px;height:670px;margin:0;'frameborder=0></iframe>");
             
@@ -328,14 +327,16 @@
 
         //Instruction Tab
         $("#instructions").click(function(){
-            $("#overlay").removeClass("d-none");
+            $("#close").show();
+            $("#overlay").removeClass("d-none")
             $("#overlayframe1").html("<iframe id='iframeoverlay' src='{% url 'exam:instructions' uid %}' style='height:800px;width:1200px;border-bottom:2px #CCC solid;'></iframe>");
         });
 
         //questionstab 
         $("#questiontab").click(function(){
+            $("#close").show();
             $("#overlay").removeClass("d-none");
-            $("#overlayframe1").html("<iframe id='iframeoverlay' src='{% url 'exam:iframe1' uid %}?section={{section.id}}' style='height:800px;width:1200px;border-bottom:2px #CCC solid;'></iframe>");
+            $("#overlayframe1").html("<iframe id='iframeoverlay' src='{% url 'exam:iframe1' uid %}?section="+sectionid+"' style='height:800px;width:1200px;border-bottom:2px #CCC solid;'></iframe>");
         });
         //closetab for overlay items
         $("#close").click(function(){
@@ -355,13 +356,15 @@
             $("#section"+sectionid).addClass("d-none");
             $("#sectionBtn"+sectionid+sectionid).removeClass("focus");
             sectionid=parseInt($this.attr('id').replace('sectionBtn'+sectionid, ''));
-            // console.log(sectionid);
+            
             $("#section"+sectionid).removeClass("d-none");
             $("#sectionBtn"+sectionid+sectionid).addClass("focus");
             $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass("not_visited");
             $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("not_answered");
-            $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).removeClass("d-none");
-        
+           
+            $("#section"+sectionid).find("#iframeid").contents().find("id"+i[sectionid]).removeClass("d-none");
+            
+
         }
         
         $reviewNext = function(){
@@ -422,11 +425,15 @@
         
         $saveNext = function(){
             $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass();
+            console.log(sectionid);
             if($("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]").is(":checked")){
+                console.log("Accepted"+sectionid);
+                $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal answered");
                 var favorite = "";
                 $.each($("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]:checked"), function(){
                 favorite+=$(this).val(); });
-                console.log(favorite);
+    
+                
                 $.ajax({
                     url: "/exam/response/{{uid}}/",
                     type: "POST",
@@ -434,13 +441,14 @@
                     });
 
 
-                $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal answered");
+                
             }
             else{
                 $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal not_answered");
             }
             
             if(i[sectionid]!=eval("maxx"+sectionid)){
+                
                 $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).addClass("d-none");
                 i[sectionid]+=1;
                 if(i[sectionid]==eval("maxx"+sectionid)){
@@ -458,26 +466,37 @@
         };
         $submitBtn = function(){
             {% for section in sections %}
+            
+                z[{{section.id}}]=0;
+                y[{{section.id}}]=0;
+                xx[{{section.id}}]=0;
+                w[{{section.id}}]=0;
+                v[{{section.id}}]=0;
+            {% endfor %}
+            {% for section in sections %}
+
             {% for id in section.no_of_questions|rangeFun %}
-                if($("#section"+sectionid).find("#panel"+{{id}}).hasClass("not_visited")){
+                if($("#section"+{{section.id}}).find("#panel"+{{id}}).hasClass("not_visited")){
+                    
                     z[{{section.id}}]+=1;
+                    
                 }else
-                if($("#section"+sectionid).find("#panel"+{{id}}).hasClass("answered")){
+                if($("#section"+{{section.id}}).find("#panel"+{{id}}).hasClass("answered")){
                     y[{{section.id}}]+=1;
                 }else
-                if($("#section"+sectionid).find("#panel"+{{id}}).hasClass("answer_marked")){
+                if($("#section"+{{section.id}}).find("#panel"+{{id}}).hasClass("answer_marked")){
                     xx[{{section.id}}]+=1;
                 }else
-                if($("#section"+sectionid).find("#panel"+{{id}}).hasClass("marked")){
+                if($("#section"+{{section.id}}).find("#panel"+{{id}}).hasClass("marked")){
                     w[{{section.id}}]+=1;
                 }else
-                if($("#section"+sectionid).find("#panel"+{{id}}).hasClass("not_answered")){
+                if($("#section"+{{section.id}}).find("#panel"+{{id}}).hasClass("not_answered")){
                     v[{{section.id}}]+=1;
                 }
                 
             {% endfor %}
         {% endfor %}
-        
+       
         $("#submitBtn").attr('href',"{% url 'exam:examsummary' uid %}?z="+z.join('')+"&y="+y.join('')+"&x="+xx.join('')+"&w="+w.join('')+"&v="+v.join(''));
 
         };

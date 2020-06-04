@@ -13,7 +13,7 @@
 <body oncontextmenu="return false;" oncopy="return false" oncut="return false" onpaste="return false">
   <div class="container-fluid">
   {% for question in questions %}
-  <div id="id{{question.id}}" class="container-fluid d-none">
+  <div class="question container-fluid d-none">
     
     <div class="row border pl-3 pt-1 m-4">
       <div class="col-6"><h6 class="font-weight-bold">Marks fo Correct :{{question.marks}} | Marks for Incorrect : {{question.negative_marks}}</h6></div>
@@ -34,8 +34,8 @@
 
         {% for option in question.choices|split  %}
         <div class="form-check font-weight-bold p-4 h5">
-          <input class="form-check-input" type="radio" name="exampleRadios{{question.id}}" value="{{option}}">
-          <label class="form-check-label" for="exampleRadios{{question.id}}">{{option}}</label>
+          <input class="option{{question.id}} form-check-input" type="radio" value="{{option}}">
+          <label class="optionlabels{{question.id}} form-check-label">{{option}}</label>
         </div>
         {% endfor %}
      
@@ -49,7 +49,21 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="{% static 'js/ques.js' %}"></script>
+<script>
+  var i=0,j=0;
+  {% for question in questions %}
+    j=0;
+    {% for option in question.choices|split  %}
+      document.querySelectorAll(".option{{question.id}}")[j].setAttribute("name","exampleRadios"+eval(i+1));
+      document.querySelectorAll(".optionlabels{{question.id}}")[j].setAttribute("for","exampleRadios"+eval(i+1));
+      j+=1;
+    {% endfor %}      
+    document.querySelectorAll(".question")[i].setAttribute("id","id"+eval(i+1)); 
+    i+=1;
+  {% endfor %}
+</script>
 </body>
+
 
 
 </html>
