@@ -25,14 +25,18 @@ def onlineexam(request,uid):
 			questions = Question.objects.filter(exam=exam)
 		else:
 			return HttpResponse("Invalid Request")
-		student_object.start_time = timezone.now()
-		sections = Section.objects.filter(exam=exam)
-		student_object.start_time = timezone.localtime(timezone.now())
-		student_object.save()
-		the_time = datetime.datetime.strptime(str(student_object.start_time), '%Y-%m-%d %H:%M:%S.%f%z')
-		new_time = the_time + datetime.timedelta(minutes=int(str(student_object.exam.total_duration/1000/1000)[-3:]))
-		new_time = new_time.strftime('%b %d, %Y %H:%M:%S')
-		return render(request,'quiz.html',{'uid':uid,'sections':sections,'questions':questions,'exam':exam,'end_time':new_time})
+		start_time = student_object.exam.start_time
+		if start_time+datetime.timedelta(minutes=10)>=timezone.localtime(timezone.now()) and start_time<=timezone.localtime(timezone.now()):
+			student_object.start_time = timezone.now()
+			sections = Section.objects.filter(exam=exam)
+			student_object.start_time = timezone.localtime(timezone.now())
+			student_object.save()
+			the_time = datetime.datetime.strptime(str(student_object.start_time), '%Y-%m-%d %H:%M:%S.%f%z')
+			new_time = the_time + datetime.timedelta(minutes=int(str(student_object.exam.total_duration/1000/1000)[-3:]))
+			new_time = new_time.strftime('%b %d, %Y %H:%M:%S')
+			return render(request,'quiz.html',{'uid':uid,'sections':sections,'questions':questions,'exam':exam,'end_time':new_time})
+		else:
+			return HttpResponse("Start time is "+str(start_time)+"Or paper was Over")
 def examSummary(request,uid):
 	if request.method=='GET':
 		if uid:
@@ -51,8 +55,10 @@ def iframeview(request,uid):
 		section = 1
 	uid = uid
 	exam = Student_Exam.objects.get(external_identifier=uid).exam
-	questions = Question.objects.filter(exam=exam,section=Section.objects.get(id=section))
-	return render(request,'iframesquestionpaper.html',{'questions':questions})
+	start_time = exam.start_time
+	if start_time+datetime.timedelta(minutes=int(str(exam.total_duration/1000/1000)[-3:]))>=timezone.localtime(timezone.now()) and start_time<=timezone.localtime(timezone.now()):
+		questions = Question.objects.filter(exam=exam,section=Section.objects.get(id=section))
+		return render(request,'iframesquestionpaper.html',{'questions':questions})
 
 def iframeview1(request,uid):
 	try:
@@ -61,28 +67,30 @@ def iframeview1(request,uid):
 		section = 1
 	uid = uid
 	exam = Student_Exam.objects.get(external_identifier=uid).exam
-	questions = Question.objects.filter(exam=exam,section=Section.objects.get(id=section))
-	return render(request,'questionpaper.html',{'questions':questions})
+	start_time = exam.start_time
+	if start_time+datetime.timedelta(minutes=int(str(exam.total_duration/1000/1000)[-3:]))>=timezone.localtime(timezone.now()) and start_time<=timezone.localtime(timezone.now()):
+		questions = Question.objects.filter(exam=exam,section=Section.objects.get(id=section))
+		return render(request,'questionpaper.html',{'questions':questions})
 
 def infoView(request,uid):
 	if request.method=='GET':
 		student_object = Student_Exam.objects.get(external_identifier = uid)
-		if student_object.exam.start_time<=timezone.localtime(timezone.now()):
-			exam = student_object.exam
-			duration = str(exam.total_duration/1000/1000)[-3:]	
-			sections = Section.objects.filter(exam=exam)
-			return render(request,'iframesInstruction.html',{'student_object':student_object,'exam':exam,'sections':sections,'duration':duration})
+		exam = student_object.exam
+		duration = str(exam.total_duration/1000/1000)[-3:]	
+		sections = Section.objects.filter(exam=exam)
+		return render(request,'iframesInstruction.html',{'student_object':student_object,'exam':exam,'sections':sections,'duration':duration})
 
 
 def examView(request,uid):
 	if request.method=='GET':
 		student_object = Student_Exam.objects.get(external_identifier = uid)
-		if student_object.exam.start_time<=timezone.localtime(timezone.now()):
+		start_time = student_object.exam.start_time
+		if start_time+datetime.timedelta(minutes=10)>=timezone.localtime(timezone.now()) and start_time<=timezone.localtime(timezone.now()):
 			student =student_object.student
 			subject_name = student_object.exam.subject_name
 			return render(request,'index.html',{'student':student,'subject_name':subject_name,'uid':uid})
 		else:
-			return HttpResponse("Start time is "+str(student_object.start_time)+"Or paper was Over")
+			return HttpResponse("Start time is "+str(start_time)+"Or paper was Over")
 	return HttpResponse("Only Get Allowded")
 
 class StudentQuizView(APIView):
@@ -97,31 +105,38 @@ class StudentQuizView(APIView):
 
 class StudentResponse(APIView):
 	def post(self,request,uid):
-		question = int(request.data.get('question'))
-		question = Question.objects.get(pk=question)
 		student_exam = Student_Exam.objects.get(external_identifier=uid)
-		student_response,created = Student_Response.objects.get_or_create(
-				question = question,
-				student_exam = student_exam
-			)
-		student_response.response = request.data.get('response')
-		student_response.time_stamp = timezone.now()
-		student_response.save()
-		return Response({'status':'ok'})
-
+		start_time = student_exam.exam.start_time
+		if start_time+datetime.timedelta(minutes=int(str(student_exam.exam.total_duration/1000/1000)[-3:]))>=timezone.localtime(timezone.now()) and start_time<=timezone.localtime(timezone.now()):
+			question = int(request.data.get('question'))
+			question = Question.objects.get(pk=question)	
+			student_response,created = Student_Response.objects.get_or_create(
+					question = question,
+					student_exam = student_exam
+				)
+			student_response.response = request.data.get('response')
+			student_response.time_stamp = timezone.now()
+			student_response.save()
+			return Response({'status':'ok'})
+		return Response({'status':"Not Allowded"})
 class PhotoUploadView(APIView):
 	def post(self, request,uid, *args, **kwargs):
 		ss = request.data['file']
 		student_object = Student_Exam.objects.get(external_identifier = uid)
-		img_upload = ProcteredSS(student_exam=student_object,img=base64_file(ss))
-		img_upload.save()
-		return Response({'status':'ok'})
-
+		start_time = student_object.exam.start_time
+		if start_time+datetime.timedelta(minutes=int(str(student_object.exam.total_duration/1000/1000)[-3:]))>=timezone.localtime(timezone.now()) and start_time<=timezone.localtime(timezone.now()):
+			img_upload = ProcteredSS(student_exam=student_object,img=base64_file(ss))
+			img_upload.save()
+			return Response({'status':'ok'})
+		return Response({'error':'Not Allowded'})
 class WarningCountUpdate(APIView):
 	def post(self,request,uid):
 		student_object = Student_Exam.objects.get(external_identifier = uid)
-		student_object.warning_count+=1
-		if student_object.warning_count>=3:
-			return Response({'status':'submit'})
-		student_object.save()
-		return Response({'status':'ok'})
+		start_time = student_object.exam.start_time
+		if start_time+datetime.timedelta(minutes=int(str(student_object.exam.total_duration/1000/1000)[-3:]))>=timezone.localtime(timezone.now()) and start_time<=timezone.localtime(timezone.now()):
+			student_object.warning_count+=1
+			if student_object.warning_count>=3:
+				return Response({'status':'submit'})
+			student_object.save()
+			return Response({'status':'ok'})
+		return Response({'status':'bad_request'})
