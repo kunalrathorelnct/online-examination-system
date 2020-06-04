@@ -504,8 +504,8 @@
             {% endfor %}
         {% endfor %}
        
-        $("#submitBtn").attr('href',"{% url 'exam:examsummary' uid %}?z="+z.join('')+"&y="+y.join('')+"&x="+xx.join('')+"&w="+w.join('')+"&v="+v.join(''));
-
+       //$("#submitBtn").attr('href',"{% url 'exam:examsummary' uid %}?z="+z.join('')+"&y="+y.join('')+"&x="+xx.join('')+"&w="+w.join('')+"&v="+v.join(''));
+        window.location.replace("{% url 'exam:examsummary' uid %}?z="+z.join('')+"&y="+y.join('')+"&x="+xx.join('')+"&w="+w.join('')+"&v="+v.join(''));
         };
       
     });

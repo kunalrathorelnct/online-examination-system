@@ -28,9 +28,8 @@ class Exam(models.Model):
 class Section(models.Model):
 	exam = models.ForeignKey(Exam,on_delete = models.CASCADE)
 	section_name = models.CharField(max_length=20)
-	section_duration = models.DurationField()
 	no_of_questions = models.IntegerField(default=0)
-	total_marks = models.IntegerField(default=100)
+	total_marks = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.section_name
@@ -104,7 +103,15 @@ def send_email(sender,**kwargs):
 		instance = kwargs.get('instance')
 		send_mail(
 				'Online-Exam by Chinmay',
-				'There is your exam on '+str(instance.exam.start_time)+'Your link yo start test is 127.0.0.1/exam/info/'+str(instance.external_identifier),
+				'There is your exam on '+str(instance.exam.start_time)+' Your link to start test is http://127.0.0.1:8000/exam/info/'+str(instance.external_identifier),
 				'chinmay1305@gmail.com',
 				[instance.student.email]
 			)
+
+@receiver(post_save,sender=Question)
+def section_update(sender,**kwargs):
+	if kwargs.get('created'):
+		instance = kwargs.get('instance')
+		instance.section.no_of_questions+=1
+		instance.section.total_marks+=instance.marks
+		instance.section.save()

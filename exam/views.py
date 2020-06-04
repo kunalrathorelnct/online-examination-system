@@ -98,7 +98,7 @@ def examView(request,uid):
 		else:
 			return HttpResponse("Start time is "+str(start_time)+"Or paper was Over")
 	return HttpResponse("Only Get Allowded")
-
+"""
 class StudentQuizView(APIView):
 	def get(self,request,uid):
 		section = request.query_params['section']
@@ -108,7 +108,7 @@ class StudentQuizView(APIView):
 		questions = QuestionSerializer(questions,many=True)
 		
 		return Response({'questions':questions.data})
-
+"""
 class StudentResponse(APIView):
 	def post(self,request,uid):
 		student_exam = Student_Exam.objects.get(external_identifier=uid)
