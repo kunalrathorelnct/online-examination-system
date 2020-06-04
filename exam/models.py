@@ -45,7 +45,9 @@ class Student_Exam(models.Model):
 	warning_count = models.IntegerField(default=0)
 	start_time = models.DateTimeField(null=True,blank=True)
 	end_time = models.DateTimeField(null=True,blank=True)
-
+	marks = models.IntegerField(default=0)
+	is_started = models.BooleanField(default=False)
+	is_completed = models.BooleanField(default=False)
 	class Meta:
 		unique_together = ['student','exam']
 
@@ -79,7 +81,7 @@ class Question(models.Model):
 	marks = models.IntegerField(default=4)
 	negative_marks = models.IntegerField(default=0)
 	choices = models.CharField(max_length = 100,blank=True,null=True)
-		
+	answer = models.CharField(max_length=20,null=True,blank=True)
 
 	def __str__(self):
 		return self.question_text[:5]
