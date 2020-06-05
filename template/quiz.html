@@ -135,7 +135,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    
     <script>
-    
+   
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -175,8 +175,9 @@
                 navigator.mediaDevices.getUserMedia({ video: true}).then((stream) => {
                 rtvideo{{section.id}}.srcObject = stream; });
         {% endfor %}
-        
-        rtvideo = document.getElementById('video1'); // real time video
+        var sectionid=parseInt($("#main").children().eq(1).attr('id').replace('section', ''));
+
+        rtvideo = document.getElementById('video'+sectionid); // real time video
 
         navigator.mediaDevices.getUserMedia({ video: true}).then((stream) => {
             rtvideo.srcObject = stream;
@@ -315,7 +316,7 @@
                 alert("Allow Camera than Click !")
             }
         }
-        
+        var sectionid=parseInt($("#main").children().eq(1).attr('id').replace('section', ''));
         $body = function(){
             $("#overlay").removeClass("d-none");
             $("#overlayframe1").html("<button id='fullscreenbutton' class='btn btn-success' onclick='$openFullscreen();'>Allow Camera and   Full Screen</button>");
@@ -354,7 +355,7 @@
 
         //pannel design logic
         
-        var sectionid=1;
+        
         $("#section"+sectionid).removeClass("d-none");
         $("#sectionBtn"+sectionid+sectionid).addClass("focus");
         $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass("not_visited");
@@ -386,7 +387,7 @@
                 $.ajax({
                     url: "/exam/response/{{uid}}/",
                     type: "POST",
-                    data: {'question':i[sectionid],'response':favorite},
+                    data: {'question':parseInt($("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).children().eq(0).attr('id')),'response':favorite},
                     });
                 $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("normal answer_marked");
             }else{
@@ -445,7 +446,7 @@
                 $.ajax({
                     url: "/exam/response/{{uid}}/",
                     type: "POST",
-                    data: {'question':i[sectionid],'response':favorite},
+                    data: {'question':parseInt($("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).children().eq(0).attr('id')),'response':favorite},
                     });
 
 
@@ -506,8 +507,8 @@
             {% endfor %}
         {% endfor %}
        
-        $("#submitBtn").attr('href',"{% url 'exam:examsummary' uid %}?z="+z.join('')+"&y="+y.join('')+"&x="+xx.join('')+"&w="+w.join('')+"&v="+v.join(''));
-
+        //$("#submitBtn").attr('href',"{% url 'exam:examsummary' uid %}?z="+z.join('')+"&y="+y.join('')+"&x="+xx.join('')+"&w="+w.join('')+"&v="+v.join(''));
+            window.location.replace("{% url 'exam:examsummary' uid %}?z="+z.join('')+"&y="+y.join('')+"&x="+xx.join('')+"&w="+w.join('')+"&v="+v.join(''));
         };
       
     });

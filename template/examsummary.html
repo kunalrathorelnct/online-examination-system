@@ -43,11 +43,11 @@
                   <tr>
                     <td>{{section.section_name}}</td>
                     <td>{{section.no_of_questions}}</td>
-                    <td id="a{{section.id}}">a</td>
-                    <td id="b{{section.id}}">b</td>
-                    <td id="c{{section.id}}">c</td>
-                    <td id="d{{section.id}}">d</td>
-                    <td id="e{{section.id}}">e</td>
+                    <td id="a{{section.id}}"></td>
+                    <td id="b{{section.id}}"></td>
+                    <td id="c{{section.id}}"></td>
+                    <td id="d{{section.id}}"></td>
+                    <td id="e{{section.id}}"></td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -66,13 +66,14 @@
         var x=query['x'];
         var y=query['y'];
         var z=query['z'];
-        
+        var i=0;
         {% for section in sections %}
-          $("#a"+{{section.id}}).html(y[{{section.id}}-1]);
-          $("#b"+{{section.id}}).html(v[{{section.id}}-1]);
-          $("#c"+{{section.id}}).html(w[{{section.id}}-1]);
-          $("#d"+{{section.id}}).html(x[{{section.id}}-1]);
-          $("#e"+{{section.id}}).html(z[{{section.id}}-1]);
+          $("#a"+{{section.id}}).html(y[i]);
+          $("#b"+{{section.id}}).html(v[i]);
+          $("#c"+{{section.id}}).html(w[i]);
+          $("#d"+{{section.id}}).html(x[i]);
+          $("#e"+{{section.id}}).html(z[i]);
+          i+=1;
         {% endfor %}
       </script>
         

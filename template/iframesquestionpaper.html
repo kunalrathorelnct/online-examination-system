@@ -14,19 +14,20 @@
   <div class="container-fluid">
   {% for question in questions %}
   <div class="question container-fluid d-none">
-    
+    <div id="{{question.id}}"></div>
     <div class="row border pl-3 pt-1 m-4">
       <div class="col-6"><h6 class="font-weight-bold">Marks fo Correct :{{question.marks}} | Marks for Incorrect : {{question.negative_marks}}</h6></div>
       <div class="col-6"><h6 class="font-weight-bold float-right">Question Type : {{question.question_type}}</h6></div>
     </div>
     <div class="row border pl-3 pt-1 m-4">
-      <h6 class="font-weight-bold" id="ques">Question No : {{question.id}}</h6>
+      <h6 class="questionno font-weight-bold"></h6>
     </div>
     <div class="row border pl-3 pt-1 m-4">
       
       <h6 class="mark h5 font-weight-bold" id="question_text">{{question.question_text}}</h6>
     </div>
       <div class="row justify-content-center">
+        
         <img id="quesImg" style="height: 50vh; width: 50vw; " src="/media/{{question.ex_img}}" alt="">
       </div>
       <div id="opt" class="row p-4">
@@ -52,6 +53,7 @@
 <script>
   var i=0,j=0;
   {% for question in questions %}
+  
     j=0;
     {% for option in question.choices|split  %}
       document.querySelectorAll(".option{{question.id}}")[j].setAttribute("name","exampleRadios"+eval(i+1));
@@ -59,6 +61,7 @@
       j+=1;
     {% endfor %}      
     document.querySelectorAll(".question")[i].setAttribute("id","id"+eval(i+1)); 
+    $(".questionno")[i].innerHTML="Question No. "+eval(i+1);
     i+=1;
   {% endfor %}
 </script>

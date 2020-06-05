@@ -14,7 +14,7 @@
       <title>Online Exam</title>
       
    </head>
-   <body onload='$("#iframeId").contents().find("#secondPagep1").hide();'>
+   <body onload='$("#iframeId").contents().find("#secondPagep1").hide(); if($("#defaultLanguage").val()!=0 && $("#disclaimer").is(":checked")) { $("#readylink").prop("disabled", ready);}'>
       <div class="container-fluid">
          <div id="overlay" class="container-fluid d-none w-100 h-100">
             <div id="overlayframe">
@@ -125,7 +125,7 @@
          var ready=false;
          $linkDisp = function(){
              
-             if($("#defaultLanguage").val()!=0) { $('#readylink').prop('disabled', ready);}
+             if($("#defaultLanguage").val()!=0 && $("#disclaimer").is(":checked")) { $('#readylink').prop('disabled', ready);}
              if(ready==true){ready=false;}
              else{ready=true;}
          }
