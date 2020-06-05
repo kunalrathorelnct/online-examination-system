@@ -65,7 +65,7 @@
                     </div>
                     <div class="col">
                         <a class=" float-right"><i class="fa fa-clock-o text-warning" aria-hidden="true"></i>
-                            <p id="timer" class="d-inline text-warning"></p>
+                            <p id="timer{{section.id}}" class="d-inline text-warning"></p>
                         </a>
                     </div>  
                 </div>
@@ -278,11 +278,13 @@
         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        $("#timer").html(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+        "{% for section in sections %}"
+        $("#timer{{section.id}}").html(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
         if (distance < 0) {
             clearInterval(x);
-            $("#timer").html("EXPIRED");
+            $("#timer{{section.id}}").html("EXPIRED");
         }
+        "{% endfor %}"
         }, 1000);
 
         
@@ -317,14 +319,15 @@
         $body = function(){
             $("#overlay").removeClass("d-none");
             $("#overlayframe1").html("<button id='fullscreenbutton' class='btn btn-success' onclick='$openFullscreen();'>Allow Camera and   Full Screen</button>");
-            
+            $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).removeClass("d-none");
         };
         
         //Calculator
 
         $("#calculator").click(function(){
-            $("#close").show();
             $("#overlay").removeClass("d-none");
+            $("#close").show();
+            
             $("#overlayframe1").html("<iframe src=https://widgetscode.com/wc/sciv/all?skin=nb1 style='width:560px;height:670px;margin:0;'frameborder=0></iframe>");
             
         });
@@ -357,7 +360,7 @@
         $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass("not_visited");
         $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("not_answered");
         $("#section"+sectionid).find("#iframeid").contents().find("#id"+i[sectionid]).removeClass("d-none");
-    
+       
         $sectionClick =function($this){
             $("#section"+sectionid).addClass("d-none");
             $("#sectionBtn"+sectionid+sectionid).removeClass("focus");
@@ -368,12 +371,12 @@
             $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass("not_visited");
             $("#section"+sectionid).find("#panel"+i[sectionid]).addClass("not_answered");
             $("#section"+sectionid).find("#iframeid").contents().find("id"+i[sectionid]).removeClass("d-none");
-            
+            $("#section"+sectionid).find("#panel"+i[sectionid]).click();
 
         }
         
         $reviewNext = function(){
-            console.log("clicked");
+            
             $("#section"+sectionid).find("#panel"+i[sectionid]).removeClass();
             if($("#section"+sectionid).find("#iframeid").contents().find("input[name=exampleRadios"+i[sectionid]+"]").is(":checked")){
                 var favorite = "";
@@ -477,6 +480,7 @@
                 xx[{{section.id}}]=0;
                 w[{{section.id}}]=0;
                 v[{{section.id}}]=0;
+
             {% endfor %}
             {% for section in sections %}
 
